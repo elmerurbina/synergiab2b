@@ -1,10 +1,12 @@
 import React from 'react';
 import Button from '../../UI/Button/Button';
+import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt } from 'react-icons/fa';
 import styles from './Footer.module.css';
 
 const Footer = () => {
   const footerSections = {
     company: {
+      title: 'Empresa',
       links: [
         { label: 'Sobre Nosotros', href: '/about' },
         { label: 'Nuestro Equipo', href: '/team' },
@@ -13,6 +15,7 @@ const Footer = () => {
       ],
     },
     products: {
+      title: 'Productos',
       links: [
         { label: 'Cómo Funciona', href: '/how-it-works' },
         { label: 'Precios', href: '/pricing' },
@@ -21,6 +24,7 @@ const Footer = () => {
       ],
     },
     support: {
+      title: 'Soporte',
       links: [
         { label: 'Centro de Ayuda', href: '/help' },
         { label: 'Términos y Condiciones', href: '/terms' },
@@ -31,10 +35,16 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { name: 'Facebook', icon: '📘', href: '#' },
-    { name: 'Twitter', icon: '🐦', href: '#' },
-    { name: 'LinkedIn', icon: '🔗', href: '#' },
-    { name: 'Instagram', icon: '📷', href: '#' },
+    { name: 'Facebook', icon: FaFacebook, href: '#' },
+    { name: 'Twitter', icon: FaTwitter, href: '#' },
+    { name: 'LinkedIn', icon: FaLinkedin, href: '#' },
+    { name: 'Instagram', icon: FaInstagram, href: '#' },
+  ];
+
+  const contactInfo = [
+    { icon: FaMapMarkerAlt, text: 'Juigalpa, Nicaragua' },
+    { icon: FaEnvelope, text: 'info@sinergiab2b.com' },
+    { icon: FaPhoneAlt, text: '+505 1234 5678' },
   ];
 
   return (
@@ -51,18 +61,21 @@ const Footer = () => {
               Conectando negocios en Nicaragua. La plataforma líder para el descubrimiento de productos y servicios entre empresas.
             </p>
             <div className={styles.socialLinks}>
-              {socialLinks.map((social) => (
-                <a key={social.name} href={social.href} className={styles.socialLink}>
-                  <span>{social.icon}</span>
-                </a>
-              ))}
+              {socialLinks.map((social) => {
+                const Icon = social.icon;
+                return (
+                  <a key={social.name} href={social.href} className={styles.socialLink} aria-label={social.name}>
+                    <Icon size={20} />
+                  </a>
+                );
+              })}
             </div>
           </div>
 
           {/* Footer Sections */}
-          {Object.entries(footerSections).map(([key, section]) => (
-            <div key={key} className={styles.footerSection}>
-              <h4>{key.charAt(0).toUpperCase() + key.slice(1)}</h4>
+          {Object.values(footerSections).map((section) => (
+            <div key={section.title} className={styles.footerSection}>
+              <h4>{section.title}</h4>
               <div className={styles.footerLinks}>
                 {section.links.map((link) => (
                   <a key={link.label} href={link.href} className={styles.footerLink}>
@@ -75,26 +88,40 @@ const Footer = () => {
 
           {/* Contact & Newsletter */}
           <div className={styles.footerSection}>
-            <h4>Contáctanos</h4>
-            <div className={styles.contactInfo}>
-              <div className={styles.contactItem}>
-                <span className={styles.contactIcon}>📍</span>
-                <span>Juigalpa, Nicaragua</span>
+            <div className={styles.contactNewsletterSection}>
+              <div>
+                <h4>Contáctanos</h4>
+                <div className={styles.contactInfo}>
+                  {contactInfo.map((item, index) => {
+                    const Icon = item.icon;
+                    return (
+                      <div key={index} className={styles.contactItem}>
+                        <span className={styles.contactIcon}>
+                          <Icon size={18} />
+                        </span>
+                        <span>{item.text}</span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-              <div className={styles.contactItem}>
-                <span className={styles.contactIcon}>📧</span>
-                <span>info@sinergiab2b.com</span>
-              </div>
-              <div className={styles.contactItem}>
-                <span className={styles.contactIcon}>📞</span>
-                <span>+505 1234 5678</span>
-              </div>
-            </div>
 
-            <h4 style={{ marginTop: 'var(--spacing-lg)' }}>Newsletter</h4>
-            <div className={styles.newsletterForm}>
-              <input type="email" placeholder="Tu correo electrónico" className={styles.newsletterInput} />
-              <Button variant="primary" size="small">Suscribirse</Button>
+              <div className={styles.newsletterSection}>
+                <h4>Newsletter</h4>
+                <div className={styles.newsletterForm}>
+                  <input
+                    type="email"
+                    placeholder="Tu correo electrónico"
+                    className={styles.newsletterInput}
+                  />
+                  <Button variant="primary" size="medium" fullWidth>
+                    Suscribirse
+                  </Button>
+                </div>
+                <p className={styles.newsletterText}>
+                  Recibe las mejores ofertas y novedades
+                </p>
+              </div>
             </div>
           </div>
         </div>

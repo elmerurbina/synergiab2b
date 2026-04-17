@@ -34,7 +34,6 @@
 .footerLogo img {
   height: 40px;
   width: auto;
-  filter: brightness(0) invert(1);
 }
 
 .footerLogoText {
@@ -60,24 +59,32 @@
 .socialLink {
   width: 36px;
   height: 36px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--primary-200);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all var(--transition-fast);
+  color: var(--primary-500);
 }
 
 .socialLink:hover {
   background-color: var(--primary-500);
+  color: white;
   transform: translateY(-2px);
 }
 
 /* Footer Sections */
+.footerSection {
+  display: flex;
+  flex-direction: column;
+}
+
 .footerSection h4 {
   color: var(--gray-600);
   margin-bottom: var(--spacing-lg);
   font-size: 1rem;
+  font-weight: 600;
 }
 
 .footerLinks {
@@ -93,7 +100,15 @@
 }
 
 .footerLink:hover {
-  color: var(--primary-300);
+  color: var(--primary-500);
+}
+
+/* Contact & Newsletter Section */
+.contactNewsletterSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  height: 100%;
 }
 
 /* Contact Info */
@@ -112,24 +127,38 @@
 }
 
 .contactIcon {
-  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  color: var(--primary-500);
 }
 
-/* Newsletter */
+/* Newsletter Section */
+.newsletterSection {
+  margin-top: auto;
+}
+
+.newsletterSection h4 {
+  margin-bottom: var(--spacing-md);
+}
+
 .newsletterForm {
   display: flex;
+  flex-direction: column;
   gap: var(--spacing-sm);
-  margin-top: var(--spacing-md);
+  width: 100%;
 }
 
 .newsletterInput {
-  flex: 1;
+  width: 100%;
   padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--primary-200);
+  background-color: var(--gray-100);
   border-radius: var(--radius-md);
   color: var(--gray-500);
   font-size: 0.875rem;
+  transition: all var(--transition-fast);
 }
 
 .newsletterInput::placeholder {
@@ -139,11 +168,19 @@
 .newsletterInput:focus {
   outline: none;
   border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px var(--primary-100);
+}
+
+.newsletterText {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  margin-top: var(--spacing-sm);
+  text-align: center;
 }
 
 /* Footer Bottom */
 .footerBottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--primary-200);
   padding-top: var(--spacing-lg);
   display: flex;
   justify-content: space-between;
@@ -169,7 +206,7 @@
 }
 
 .legalLink:hover {
-  color: var(--primary-300);
+  color: var(--primary-500);
 }
 
 /* Responsive */
@@ -194,5 +231,15 @@
 
   .newsletterForm {
     flex-direction: column;
+  }
+
+  .contactNewsletterSection {
+    gap: var(--spacing-lg);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .footerGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
