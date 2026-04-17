@@ -1,0 +1,413 @@
+.teamSection {
+  padding: var(--spacing-2xl) 0;
+  background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-200) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-xl);
+}
+
+/* Section Header */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--gray-600);
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(135deg, var(--primary-500), var(--tertiary-500));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sectionSubtitle {
+  font-size: 1.125rem;
+  color: var(--gray-400);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Team Grid */
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+/* Team Card */
+.teamCard {
+  background: var(--gray-100);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.teamCard:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Card Header with Gradient */
+.cardHeader {
+  background: linear-gradient(135deg, var(--primary-500), var(--tertiary-500));
+  padding: var(--spacing-xl);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cardHeader::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  transform: rotate(45deg);
+}
+
+/* Avatar */
+.avatar {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto var(--spacing-lg);
+  position: relative;
+  z-index: 1;
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid white;
+  box-shadow: var(--shadow-md);
+  background: var(--gray-100);
+}
+
+.avatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-200), var(--tertiary-200));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  border: 4px solid white;
+  box-shadow: var(--shadow-md);
+}
+
+/* Member Name */
+.memberName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: var(--spacing-xs);
+  position: relative;
+  z-index: 1;
+}
+
+.memberRole {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  position: relative;
+  z-index: 1;
+}
+
+.roleIcon {
+  font-size: 1rem;
+}
+
+/* Card Body */
+.cardBody {
+  padding: var(--spacing-xl);
+}
+
+/* Skills Section */
+.skillsSection {
+  margin-bottom: var(--spacing-lg);
+}
+
+.skillsTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gray-600);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.skillsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.skillTag {
+  background: linear-gradient(135deg, var(--primary-100), var(--primary-200));
+  color: var(--primary-500);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.skillTag:hover {
+  background: var(--primary-500);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Description */
+.memberDescription {
+  color: var(--gray-500);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Social Links */
+.socialLinks {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--gray-300);
+}
+
+.socialLink {
+  width: 36px;
+  height: 36px;
+  background-color: var(--gray-200);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-500);
+  transition: all var(--transition-fast);
+}
+
+.socialLink:hover {
+  background-color: var(--primary-500);
+  color: white;
+  transform: translateY(-3px);
+}
+
+/* Team Stats */
+.teamStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-2xl);
+  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, var(--primary-500), var(--tertiary-500));
+  border-radius: var(--radius-lg);
+  color: white;
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statNumber {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+/* Custom Avatar Styles */
+.customAvatar {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto var(--spacing-lg);
+  position: relative;
+  z-index: 1;
+}
+
+.avatarSvg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-normal);
+}
+
+.teamCard:hover .avatarSvg {
+  transform: scale(1.05);
+}
+
+/* Avatar Status Indicator */
+.avatarStatus {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--success);
+  border: 3px solid white;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+/* Add to existing CSS */
+
+/* Member Quote */
+.memberQuote {
+  background: linear-gradient(135deg, var(--primary-100), var(--gray-200));
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  font-style: italic;
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+  text-align: center;
+}
+
+.quoteIcon {
+  font-size: 1.5rem;
+  color: var(--primary-500);
+  opacity: 0.5;
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  font-family: serif;
+}
+
+/* Avatar hover effects */
+.customAvatar {
+  position: relative;
+  cursor: pointer;
+}
+
+.customAvatar:hover .avatarSvg {
+  transform: scale(1.05);
+}
+
+.avatarStatus {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--success);
+  border: 2px solid white;
+  border-radius: 50%;
+  z-index: 2;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.roleBadge {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--primary-500), var(--tertiary-500));
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-xl);
+  font-size: 0.625rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .teamSection {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .sectionTitle {
+    font-size: 1.75rem;
+  }
+
+  .sectionSubtitle {
+    font-size: 0.875rem;
+  }
+
+  .teamGrid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .memberName {
+    font-size: 1.25rem;
+  }
+
+  .teamStats {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.teamCard {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.teamCard:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.teamCard:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.teamCard:nth-child(3) {
+  animation-delay: 0.3s;
+}
