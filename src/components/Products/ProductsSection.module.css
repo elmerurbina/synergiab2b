@@ -1,0 +1,459 @@
+.productsSection {
+  padding: var(--spacing-2xl) 0;
+  background: linear-gradient(135deg, var(--gray-200) 0%, var(--gray-100) 100%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-xl);
+}
+
+/* Section Header */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--gray-600);
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(135deg, var(--primary-500), var(--tertiary-500));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sectionSubtitle {
+  font-size: 1.125rem;
+  color: var(--gray-400);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Navigation Tabs */
+.tabsContainer {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-2xl);
+  flex-wrap: wrap;
+  background: var(--gray-100);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.tab {
+  padding: 0.875rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gray-500);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.tab:hover {
+  color: var(--primary-500);
+  background-color: var(--primary-100);
+}
+
+.tab.active {
+  background: linear-gradient(135deg, var(--primary-500), var(--tertiary-500));
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+/* Tab Content */
+.tabContent {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== PRODUCTOS TAB ==================== */
+.productsTheory {
+  background: var(--gray-100);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.theoryTitle {
+  font-size: 1.5rem;
+  color: var(--gray-600);
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.theoryDescription {
+  color: var(--gray-500);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-lg);
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+}
+
+.featureCard {
+  background: white;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  transition: all var(--transition-normal);
+}
+
+.featureCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.featureIcon {
+  font-size: 2rem;
+  color: var(--primary-500);
+  margin-bottom: var(--spacing-md);
+}
+
+.featureTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  color: var(--gray-600);
+}
+
+.featureDescription {
+  font-size: 0.875rem;
+  color: var(--gray-400);
+  line-height: 1.5;
+}
+
+/* ==================== CÓMO FUNCIONA TAB ==================== */
+.stepsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.stepCard {
+  text-align: center;
+  padding: var(--spacing-xl);
+  background: var(--gray-100);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.stepCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.stepNumber {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--primary-500), var(--tertiary-500));
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 auto var(--spacing-lg);
+}
+
+.stepIcon {
+  font-size: 2rem;
+  color: var(--primary-500);
+  margin-bottom: var(--spacing-lg);
+}
+
+.stepTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-600);
+  margin-bottom: var(--spacing-md);
+}
+
+.stepDescription {
+  color: var(--gray-400);
+  line-height: 1.6;
+}
+
+/* ==================== PRECIOS TAB ==================== */
+.pricingTheory {
+  text-align: center;
+}
+
+.pricingDescription {
+  color: var(--gray-500);
+  margin-bottom: var(--spacing-xl);
+  line-height: 1.6;
+}
+
+.pricingModels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-xl);
+}
+
+.pricingModelCard {
+  background: var(--gray-100);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.pricingModelCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.modelIcon {
+  font-size: 2.5rem;
+  color: var(--primary-500);
+  margin-bottom: var(--spacing-md);
+}
+
+.modelTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+}
+
+.modelPrice {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-500);
+  margin-bottom: var(--spacing-md);
+}
+
+.modelFeatures {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--spacing-md);
+}
+
+.modelFeature {
+  padding: var(--spacing-xs) 0;
+  color: var(--gray-500);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+/* ==================== PROVEEDORES TAB ==================== */
+.proveedoresTheory {
+  background: var(--gray-100);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+}
+
+.benefitsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  margin: var(--spacing-xl) 0;
+}
+
+.benefitItem {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: white;
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-normal);
+}
+
+.benefitItem:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.benefitIcon {
+  font-size: 1.5rem;
+  color: var(--primary-500);
+  flex-shrink: 0;
+}
+
+.benefitContent h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+  color: var(--gray-600);
+}
+
+.benefitContent p {
+  font-size: 0.875rem;
+  color: var(--gray-400);
+  line-height: 1.5;
+}
+
+.requirements {
+  background: linear-gradient(135deg, var(--primary-100), var(--gray-100));
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  margin-top: var(--spacing-xl);
+}
+
+.requirementsTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.requirementsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  list-style: none;
+  padding: 0;
+}
+
+.requirementsList li {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--gray-600);
+  font-size: 0.875rem;
+}
+
+/* ==================== COMPRADORES TAB ==================== */
+.compradoresTheory {
+  background: var(--gray-100);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+}
+
+.advantagesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+  margin: var(--spacing-xl) 0;
+}
+
+.advantageCard {
+  text-align: center;
+  padding: var(--spacing-xl);
+  background: white;
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-normal);
+}
+
+.advantageCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.advantageIcon {
+  font-size: 2rem;
+  color: var(--primary-500);
+  margin-bottom: var(--spacing-md);
+}
+
+.advantageTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  color: var(--gray-600);
+}
+
+.advantageDescription {
+  font-size: 0.875rem;
+  color: var(--gray-400);
+  line-height: 1.5;
+}
+
+.processSteps {
+  display: flex;
+  justify-content: space-between;
+  margin: var(--spacing-xl) 0;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.processStep {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
+.processStep:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary-500);
+  font-size: 1.5rem;
+}
+
+.processNumber {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary-500), var(--tertiary-500));
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-md);
+  font-weight: 700;
+}
+
+.processText {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .processStep:not(:last-child)::after {
+    display: none;
+  }
+
+  .sectionTitle {
+    font-size: 1.75rem;
+  }
+
+  .tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+}
