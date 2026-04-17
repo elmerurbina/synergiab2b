@@ -1,0 +1,174 @@
+.sidebar {
+  background-color: var(--gray-100);
+  border-right: 1px solid var(--gray-300);
+  width: 280px;
+  height: calc(100vh - 72px);
+  position: sticky;
+  top: 72px;
+  overflow-y: auto;
+  transition: transform var(--transition-normal);
+}
+
+.sidebarContent {
+  padding: var(--spacing-lg);
+}
+
+/* Sidebar Sections */
+.section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.sectionTitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray-400);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--gray-300);
+}
+
+/* Navigation Items */
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--gray-500);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  margin-bottom: var(--spacing-xs);
+  cursor: pointer;
+}
+
+.navItem:hover {
+  background-color: var(--primary-100);
+  color: var(--primary-500);
+}
+
+.activeNavItem {
+  background-color: var(--primary-100);
+  color: var(--primary-500);
+  font-weight: 500;
+}
+
+/* Filters Section */
+.filterGroup {
+  margin-bottom: var(--spacing-lg);
+}
+
+.filterLabel {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: var(--spacing-sm);
+  color: var(--gray-500);
+}
+
+.filterSelect,
+.filterInput {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  transition: all var(--transition-fast);
+}
+
+.filterSelect:focus,
+.filterInput:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px var(--primary-100);
+}
+
+/* Category List */
+.categoryList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.categoryItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-sm);
+}
+
+.categoryItem:hover {
+  background-color: var(--primary-100);
+}
+
+.categoryCheckbox {
+  cursor: pointer;
+}
+
+.categoryName {
+  flex: 1;
+  font-size: 0.875rem;
+}
+
+.categoryCount {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+}
+
+/* Mobile Sidebar */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 72px;
+    transform: translateX(-100%);
+    z-index: 998;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .overlay {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 997;
+    display: none;
+  }
+
+  .overlay.open {
+    display: block;
+  }
+}
+
+/* Sidebar Toggle Button */
+.toggleButton {
+  position: fixed;
+  bottom: var(--spacing-lg);
+  right: var(--spacing-lg);
+  background-color: var(--primary-500);
+  color: white;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-lg);
+  z-index: 999;
+}
+
+@media (max-width: 768px) {
+  .toggleButton {
+    display: flex;
+  }
+}

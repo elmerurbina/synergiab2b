@@ -1,0 +1,59 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+}
+
+.content {
+  flex: 1;
+  padding: var(--spacing-xl);
+  overflow-x: hidden;
+}
+
+/* With Sidebar Layout */
+.withSidebar {
+  display: flex;
+  width: 100%;
+}
+
+.sidebarContainer {
+  flex-shrink: 0;
+}
+
+.contentContainer {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Without Sidebar */
+.withoutSidebar {
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .content {
+    padding: var(--spacing-md);
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content > * {
+  animation: fadeIn 0.3s ease-out;
+}
