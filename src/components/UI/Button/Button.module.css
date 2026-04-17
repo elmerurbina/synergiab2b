@@ -72,7 +72,7 @@
 }
 
 .tertiary:hover:not(:disabled) {
-  background-color: var(--tertiary-100);
+  background-color: var(--tertiary-300);
   color: var(--gray-500);
 }
 
@@ -122,7 +122,7 @@
 }
 
 .outline:hover:not(:disabled) {
-  background-color: var(--tertiary-100);
+  background-color: var(--tertiary-300);
   color: var(--gray-500);
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
