@@ -1,3 +1,4 @@
+# backend/urls.py
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -10,33 +11,23 @@ schema_view = get_schema_view(
     openapi.Info(
         title="SinergiaB2B API",
         default_version='v1',
-        description="API para la plataforma SinergiaB2B - Conexión de negocios en Nicaragua",
-        terms_of_service="https://www.sinergiab2b.com/terms/",
-        contact=openapi.Contact(email="info@sinergiab2b.com"),
-        license=openapi.License(name="BSD License"),
+        description="API para SinergiaB2B - Plataforma B2B",
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
 
 urlpatterns = [
-    # Admin
     path('admin/', admin.site.urls),
-    
-    # API endpoints
     path('api/auth/', include('apps.accounts.urls')),
     path('api/productos/', include('apps.products.urls')),
     path('api/categorias/', include('apps.categories.urls')),
     path('api/ubicaciones/', include('apps.locations.urls')),
     path('api/favoritos/', include('apps.favorites.urls')),
     path('api/interacciones/', include('apps.interactions.urls')),
-    
-    # API Documentation
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
-# Serve media files in development
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

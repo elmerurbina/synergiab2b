@@ -1,21 +1,17 @@
+# apps/accounts/urls.py
 from django.urls import path
-from .views import (
-    RegisterView, LoginView, LogoutView, ProfileView, ChangePasswordView,
-    RefreshTokenView, UserListView, UserDetailView
-)
+from rest_framework_simplejwt.views import TokenRefreshView
+from . import views
 
 urlpatterns = [
-    # Authentication
-    path('register/', RegisterView.as_view(), name='register'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),
-    path('refresh/', RefreshTokenView.as_view(), name='refresh'),
-    
-    # Profile
-    path('profile/', ProfileView.as_view(), name='profile'),
-    path('change-password/', ChangePasswordView.as_view(), name='change-password'),
-    
-    # Admin
-    path('users/', UserListView.as_view(), name='user-list'),
-    path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
+    path('register/', views.RegisterView.as_view(), name='register'),
+    path('login/', views.LoginView.as_view(), name='login'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('profile/', views.ProfileView.as_view(), name='profile'),
+    path('change-password/', views.ChangePasswordView.as_view(), name='change-password'),
+    path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('users/', views.UserListView.as_view(), name='user-list'),
+    path('users/<int:pk>/', views.UserDetailView.as_view(), name='user-detail'),
+    path('proveedores/', views.ProveedorListView.as_view(), name='proveedor-list'),
+    path('proveedores/<int:pk>/', views.ProveedorDetailView.as_view(), name='proveedor-detail'),
 ]

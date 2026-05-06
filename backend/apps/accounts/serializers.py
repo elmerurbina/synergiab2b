@@ -43,13 +43,21 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(required=True, write_only=True)
     
     def validate(self, attrs):
-        user = authenticate(email=attrs['email'], password=attrs['password'])
-        if not user:
+        email = attrs.get('email')
+        password = attrs.get('password')
+        
+        # Manual authentication since Django's authenticate doesn't work with email by default
+        try:
+            user = User.objects.get(email=email)
+            if user.check_password(password):
+                if not user.estado:
+                    raise serializers.ValidationError("Usuario inactivo")
+                attrs['user'] = user
+                return attrs
+            else:
+                raise serializers.ValidationError("Credenciales inválidas")
+        except User.DoesNotExist:
             raise serializers.ValidationError("Credenciales inválidas")
-        if not user.estado:
-            raise serializers.ValidationError("Usuario inactivo")
-        attrs['user'] = user
-        return attrs
 
 
 class ChangePasswordSerializer(serializers.Serializer):
