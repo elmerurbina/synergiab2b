@@ -31,12 +31,13 @@ class EtiquetaSerializer(serializers.ModelSerializer):
 class ProductoListSerializer(serializers.ModelSerializer):
     precio_actual = serializers.SerializerMethodField()
     imagen_principal = serializers.SerializerMethodField()
+    imagenes_list = serializers.SerializerMethodField()
     
     class Meta:
         model = Producto
         fields = ('id', 'nombre', 'descripcion_corta', 'precio', 'precio_oferta', 
                  'precio_actual', 'categoria_id', 'proveedor_id', 'imagen_principal', 
-                 'visitas', 'ubicacion_id', 'estado')
+                 'imagenes_list', 'visitas', 'ubicacion_id', 'estado', 'stock')
     
     def get_precio_actual(self, obj):
         if obj.precio_oferta and obj.precio_oferta < obj.precio:
@@ -44,13 +45,35 @@ class ProductoListSerializer(serializers.ModelSerializer):
         return obj.precio
     
     def get_imagen_principal(self, obj):
+        # Try to get image marked as principal first
         imagen = obj.imagenes.filter(es_principal=True).first()
+        
+        # If no principal image, get the first image
+        if not imagen:
+            imagen = obj.imagenes.first()
+        
         if imagen and imagen.url:
             request = self.context.get('request')
             if request:
                 return request.build_absolute_uri(imagen.url.url)
             return imagen.url.url
         return None
+    
+    def get_imagenes_list(self, obj):
+        request = self.context.get('request')
+        imagenes = []
+        for img in obj.imagenes.all():
+            if img.url:
+                if request:
+                    url = request.build_absolute_uri(img.url.url)
+                else:
+                    url = img.url.url
+                imagenes.append({
+                    'id': img.id,
+                    'url': url,
+                    'es_principal': img.es_principal
+                })
+        return imagenes
 
 
 class ProductoDetailSerializer(serializers.ModelSerializer):
@@ -60,6 +83,7 @@ class ProductoDetailSerializer(serializers.ModelSerializer):
     proveedor_info = UserSerializer(source='proveedor', read_only=True)
     es_patrocinado = serializers.SerializerMethodField()
     precio_actual = serializers.SerializerMethodField()
+    imagen_principal = serializers.SerializerMethodField()
     
     class Meta:
         model = Producto
@@ -67,12 +91,24 @@ class ProductoDetailSerializer(serializers.ModelSerializer):
                  'precio_oferta', 'precio_actual', 'stock', 'unidad_medida', 
                  'categoria', 'categoria_info', 'proveedor', 'proveedor_info',
                  'ubicacion', 'estado', 'visitas', 'imagenes', 'etiquetas', 
-                 'es_patrocinado', 'fecha_creacion', 'fecha_actualizacion')
+                 'es_patrocinado', 'imagen_principal', 'fecha_creacion', 'fecha_actualizacion')
     
     def get_precio_actual(self, obj):
         if obj.precio_oferta and obj.precio_oferta < obj.precio:
             return obj.precio_oferta
         return obj.precio
+    
+    def get_imagen_principal(self, obj):
+        imagen = obj.imagenes.filter(es_principal=True).first()
+        if not imagen:
+            imagen = obj.imagenes.first()
+        
+        if imagen and imagen.url:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(imagen.url.url)
+            return imagen.url.url
+        return None
     
     def get_etiquetas(self, obj):
         etiquetas = obj.etiquetas_rel.all()
@@ -91,6 +127,22 @@ class ProductoCreateUpdateSerializer(serializers.ModelSerializer):
         model = Producto
         fields = ('nombre', 'descripcion', 'descripcion_corta', 'precio', 'precio_oferta',
                  'stock', 'unidad_medida', 'categoria', 'ubicacion', 'etiquetas')
+    
+    def validate_descripcion_corta(self, value):
+        if not value or not value.strip():
+            raise serializers.ValidationError("La descripción corta es requerida")
+        if len(value) < 10:
+            raise serializers.ValidationError("La descripción corta debe tener al menos 10 caracteres")
+        if len(value) > 200:
+            raise serializers.ValidationError("La descripción corta debe tener menos de 200 caracteres")
+        return value
+    
+    def validate_descripcion(self, value):
+        if not value or not value.strip():
+            raise serializers.ValidationError("La descripción es requerida")
+        if len(value) < 20:
+            raise serializers.ValidationError("La descripción debe tener al menos 20 caracteres")
+        return value
     
     def create(self, validated_data):
         etiquetas = validated_data.pop('etiquetas', [])
