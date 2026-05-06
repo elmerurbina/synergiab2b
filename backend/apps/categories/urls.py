@@ -1,8 +1,10 @@
 from django.urls import path
-from .views import CategoriaListView, CategoriaDetailView, SubcategoriaListView
+from . import views
 
 urlpatterns = [
-    path('', CategoriaListView.as_view(), name='category-list'),
-    path('<slug:slug>/', CategoriaDetailView.as_view(), name='category-detail'),
-    path('subcategorias/<int:parent_id>/', SubcategoriaListView.as_view(), name='subcategory-list'),
+    path('', views.CategoriaListView.as_view(), name='categoria-list'),
+    path('crear/', views.CategoriaCreateView.as_view(), name='categoria-create'),  # ADD THIS LINE
+    path('<slug:slug>/', views.CategoriaDetailView.as_view(), name='categoria-detail'),
+    path('<slug:slug>/productos/', views.CategoriaProductosView.as_view(), name='categoria-productos'),
+    path('subcategorias/<int:parent_id>/', views.SubcategoriaListView.as_view(), name='subcategorias'),
 ]

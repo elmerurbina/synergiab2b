@@ -289,6 +289,125 @@
 .outOfStock {
     color: var(--error);
 }
+.imageUploadArea {
+    margin-top: 8px;
+    padding: 20px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+.uploadButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: #1A73E8;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.uploadButton:hover {
+    background-color: #1557b0;
+}
+
+.uploadHint {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #666;
+}
+
+.imageGallery {
+    margin-top: 20px;
+}
+
+.imageGallery h4 {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.imageGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+}
+
+.imageItem {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+}
+
+.imageItem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.imageOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.imageItem:hover .imageOverlay {
+    opacity: 1;
+}
+
+.setMainBtn, .deleteImageBtn {
+    background: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: transform 0.2s;
+}
+
+.setMainBtn:hover {
+    transform: scale(1.1);
+    background-color: #ffc107;
+    color: white;
+}
+
+.deleteImageBtn:hover {
+    transform: scale(1.1);
+    background-color: #dc3545;
+    color: white;
+}
+
+.mainBadge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background-color: #ffc107;
+    color: #333;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 1;
+}
 
 @media (max-width: 768px) {
     .priceRow {

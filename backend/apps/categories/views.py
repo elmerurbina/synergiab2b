@@ -1,6 +1,7 @@
 from rest_framework import generics, filters, status
-from rest_framework.response import Response  # Add this missing import
-from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
 from django.db.models import Count
 from .models import Categoria
 from .serializers import CategoriaSerializer
@@ -42,6 +43,28 @@ class CategoriaDetailView(generics.RetrieveAPIView):
     serializer_class = CategoriaSerializer
     permission_classes = [AllowAny]
     lookup_field = 'slug'
+
+
+class CategoriaCreateView(generics.CreateAPIView):
+    """Create a new category - Only for authenticated users (proveedores/admins)"""
+    queryset = Categoria.objects.all()
+    serializer_class = CategoriaSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def perform_create(self, serializer):
+        # Optional: You can add validation or set created_by if you have that field
+        serializer.save()
+        
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            return Response({
+                'message': 'Categoría creada exitosamente',
+                'id': serializer.data['id'],
+                'nombre': serializer.data['nombre']
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SubcategoriaListView(generics.ListAPIView):
