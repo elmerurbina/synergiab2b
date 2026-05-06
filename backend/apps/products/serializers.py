@@ -5,10 +5,20 @@ from apps.accounts.serializers import UserSerializer
 
 
 class ImagenProductoSerializer(serializers.ModelSerializer):
+    url_absoluta = serializers.SerializerMethodField()
+    
     class Meta:
         model = ImagenProducto
-        fields = ('id', 'producto', 'url', 'es_principal', 'orden')
+        fields = ('id', 'producto', 'url', 'url_absoluta', 'es_principal', 'orden')
         read_only_fields = ('id',)
+    
+    def get_url_absoluta(self, obj):
+        if obj.url:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.url.url)
+            return obj.url.url
+        return None
 
 
 class EtiquetaSerializer(serializers.ModelSerializer):
@@ -19,36 +29,50 @@ class EtiquetaSerializer(serializers.ModelSerializer):
 
 
 class ProductoListSerializer(serializers.ModelSerializer):
-    imagenes = ImagenProductoSerializer(many=True, read_only=True)
+    precio_actual = serializers.SerializerMethodField()
     imagen_principal = serializers.SerializerMethodField()
-    categoria_nombre = serializers.CharField(source='categoria.nombre', read_only=True)
-    proveedor_nombre = serializers.CharField(source='proveedor.empresa', read_only=True)
     
     class Meta:
         model = Producto
         fields = ('id', 'nombre', 'descripcion_corta', 'precio', 'precio_oferta', 
-                 'precio_actual', 'categoria', 'categoria_nombre', 'proveedor', 
-                 'proveedor_nombre', 'imagen_principal', 'visitas', 'ubicacion')
-        read_only_fields = ('id', 'visitas')
+                 'precio_actual', 'categoria_id', 'proveedor_id', 'imagen_principal', 
+                 'visitas', 'ubicacion_id', 'estado')
+    
+    def get_precio_actual(self, obj):
+        if obj.precio_oferta and obj.precio_oferta < obj.precio:
+            return obj.precio_oferta
+        return obj.precio
     
     def get_imagen_principal(self, obj):
         imagen = obj.imagenes.filter(es_principal=True).first()
-        if imagen:
-            return self.context['request'].build_absolute_uri(imagen.url.url)
+        if imagen and imagen.url:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(imagen.url.url)
+            return imagen.url.url
         return None
 
 
 class ProductoDetailSerializer(serializers.ModelSerializer):
     imagenes = ImagenProductoSerializer(many=True, read_only=True)
     etiquetas = serializers.SerializerMethodField()
-    categoria_detalle = CategoriaSerializer(source='categoria', read_only=True)
-    proveedor_detalle = UserSerializer(source='proveedor', read_only=True)
+    categoria_info = CategoriaSerializer(source='categoria', read_only=True)
+    proveedor_info = UserSerializer(source='proveedor', read_only=True)
     es_patrocinado = serializers.SerializerMethodField()
+    precio_actual = serializers.SerializerMethodField()
     
     class Meta:
         model = Producto
-        fields = '__all__'
-        read_only_fields = ('id', 'visitas', 'fecha_creacion', 'fecha_actualizacion')
+        fields = ('id', 'nombre', 'descripcion', 'descripcion_corta', 'precio', 
+                 'precio_oferta', 'precio_actual', 'stock', 'unidad_medida', 
+                 'categoria', 'categoria_info', 'proveedor', 'proveedor_info',
+                 'ubicacion', 'estado', 'visitas', 'imagenes', 'etiquetas', 
+                 'es_patrocinado', 'fecha_creacion', 'fecha_actualizacion')
+    
+    def get_precio_actual(self, obj):
+        if obj.precio_oferta and obj.precio_oferta < obj.precio:
+            return obj.precio_oferta
+        return obj.precio
     
     def get_etiquetas(self, obj):
         etiquetas = obj.etiquetas_rel.all()
@@ -73,7 +97,7 @@ class ProductoCreateUpdateSerializer(serializers.ModelSerializer):
         producto = Producto.objects.create(**validated_data)
         
         for etiqueta_nombre in etiquetas:
-            etiqueta, _ = Etiqueta.objects.get_or_create(nombre=etiqueta_nombre)
+            etiqueta, _ = Etiqueta.objects.get_or_create(nombre=etiqueta_nombre.lower())
             ProductoEtiqueta.objects.create(producto=producto, etiqueta=etiqueta)
         
         return producto
@@ -88,16 +112,16 @@ class ProductoCreateUpdateSerializer(serializers.ModelSerializer):
         if etiquetas is not None:
             instance.etiquetas_rel.all().delete()
             for etiqueta_nombre in etiquetas:
-                etiqueta, _ = Etiqueta.objects.get_or_create(nombre=etiqueta_nombre)
+                etiqueta, _ = Etiqueta.objects.get_or_create(nombre=etiqueta_nombre.lower())
                 ProductoEtiqueta.objects.create(producto=instance, etiqueta=etiqueta)
         
         return instance
 
 
 class ProductoPatrocinadoSerializer(serializers.ModelSerializer):
-    producto_detalle = ProductoListSerializer(source='producto', read_only=True)
+    producto_info = ProductoListSerializer(source='producto', read_only=True)
     
     class Meta:
         model = ProductoPatrocinado
-        fields = ('id', 'producto', 'producto_detalle', 'fecha_inicio', 'fecha_fin', 'activo')
+        fields = ('id', 'producto', 'producto_info', 'fecha_inicio', 'fecha_fin', 'activo')
         read_only_fields = ('id',)
