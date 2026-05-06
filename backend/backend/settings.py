@@ -7,7 +7,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Define BASE_DIR FIRST - before using it
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Now define MEDIA settings AFTER BASE_DIR is defined
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-your-secret-key-here')
 DEBUG = True
 ALLOWED_HOSTS = ['*']

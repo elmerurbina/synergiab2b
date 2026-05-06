@@ -179,9 +179,28 @@ class ProductoDeleteView(generics.DestroyAPIView):
     def get_queryset(self):
         return Producto.objects.filter(proveedor=self.request.user)
     
-    def perform_destroy(self, instance):
-        instance.estado = 'inactivo'
-        instance.save()
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            print(f"🗑️ Deleting product: {instance.id} - {instance.nombre}")
+            
+
+            instance.delete()
+            
+            return Response({
+                'message': 'Producto eliminado exitosamente',
+                'id': instance.id
+            }, status=status.HTTP_200_OK)
+            
+        except Producto.DoesNotExist:
+            return Response({
+                'error': 'Producto no encontrado'
+            }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            print(f"❌ Error deleting product: {str(e)}")
+            return Response({
+                'error': 'Error al eliminar el producto'
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProductoPatrocinadoListView(generics.ListAPIView):
