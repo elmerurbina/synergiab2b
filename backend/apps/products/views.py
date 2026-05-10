@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from django.db.models import Q, Count
 from django.utils import timezone
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Producto, ImagenProducto, Etiqueta, ProductoPatrocinado
 from .serializers import (
     ProductoListSerializer, ProductoDetailSerializer, 
@@ -225,6 +226,7 @@ class ImagenProductoView(APIView):
     Subir o eliminar imágenes de productos
     """
     permission_classes = [IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser) 
     
     def post(self, request):
         serializer = ImagenProductoSerializer(data=request.data, context={'request': request})

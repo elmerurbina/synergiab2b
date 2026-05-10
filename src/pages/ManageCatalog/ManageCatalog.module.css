@@ -49,7 +49,7 @@
 
 @media (max-width: 768px) {
     .header button {
-        position: static; /* 🔥 KEY FIX */
+        position: static; 
         width: 100%;
         margin-top: 10px;
     }

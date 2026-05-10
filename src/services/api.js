@@ -6,13 +6,9 @@ export const productAPI = {
         return axiosInstance.get('/productos/', { params });
     },
 
-    uploadImage: (formData) => {
-        return axiosInstance.post('/productos/imagenes/', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            }
-        });
-    },
+   uploadImage: (formData) => {
+    return axiosInstance.post('/productos/imagenes/', formData);
+},
     
     deleteImage: (imageId) => {
         return axiosInstance.delete(`/productos/imagenes/${imageId}/`);
