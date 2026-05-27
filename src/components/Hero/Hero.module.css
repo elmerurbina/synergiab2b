@@ -69,10 +69,12 @@
 }
 
 .highlight {
-  background: linear-gradient(135deg, var(--primary-500), var(--tertiary-400));
+  background: linear-gradient(90deg, var(--primary-500), var(--tertiary-400), var(--secondary-400), var(--primary-500));
+  background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  animation: shine 6s linear infinite;
 }
 
 .description {
@@ -267,6 +269,15 @@
   }
   50% {
     transform: translateY(-20px);
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 300% 50%;
   }
 }
 

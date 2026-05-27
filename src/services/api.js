@@ -154,3 +154,23 @@ export const interactionAPI = {
         return axiosInstance.get('/interacciones/top/', { params });
     }
 };
+
+// Valoraciones (Ratings) API
+export const ratingAPI = {
+    getRatings: (productoId, params = {}) => {
+        return axiosInstance.get('/interacciones/valoraciones/', { params: { producto_id: productoId, ...params } });
+    },
+    createRating: (productoId, puntuacion, comentario = '') => {
+        return axiosInstance.post('/interacciones/valoraciones/crear/', {
+            producto_id: productoId,
+            puntuacion: puntuacion,
+            comentario: comentario
+        });
+    },
+    deleteRating: (productoId) => {
+        return axiosInstance.delete(`/interacciones/valoraciones/eliminar/${productoId}/`);
+    },
+    getUserProductRating: (productoId) => {
+        return axiosInstance.get(`/interacciones/valoraciones/producto/${productoId}/`);
+    }
+};

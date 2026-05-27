@@ -1,0 +1,327 @@
+.catalogContainer {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--spacing-2xl);
+  max-width: 1200px;
+  margin: var(--spacing-2xl) auto;
+  padding: 0 var(--spacing-md);
+}
+
+/* Filter Sidebar */
+.filterSection {
+  background-color: var(--gray-100);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  height: fit-content;
+  box-shadow: var(--shadow-sm);
+}
+
+.filterTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gray-500);
+  margin-top: 0;
+  margin-bottom: var(--spacing-lg);
+  border-bottom: 2px solid var(--primary-100);
+  padding-bottom: var(--spacing-sm);
+}
+
+.filterGroup {
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.filterGroup label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray-400);
+  text-transform: uppercase;
+}
+
+.filterInput,
+.filterSelect {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  color: var(--gray-500);
+  outline: none;
+  background-color: white;
+  transition: border-color var(--transition-fast);
+}
+
+.filterInput:focus,
+.filterSelect:focus {
+  border-color: var(--primary-500);
+}
+
+.priceInputs {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.priceInput {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.priceInput:focus {
+  border-color: var(--primary-500);
+}
+
+.priceSeparator {
+  color: var(--gray-400);
+}
+
+.resetButton {
+  width: 100%;
+  padding: var(--spacing-sm);
+  background-color: var(--gray-200);
+  border: 1px solid var(--gray-300);
+  color: var(--gray-500);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.resetButton:hover {
+  background-color: var(--primary-100);
+  color: var(--primary-500);
+  border-color: var(--primary-300);
+}
+
+/* Products Section */
+.productsGridSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  gap: var(--spacing-md);
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--gray-500);
+}
+
+.resultsCount {
+  font-size: 0.9rem;
+  color: var(--gray-400);
+}
+
+/* Loading & Empty States */
+.loadingContainer,
+.emptyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background-color: var(--gray-100);
+  border: 1px dashed var(--gray-300);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--primary-100);
+  border-top: 4px solid var(--primary-500);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-md);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.emptyMessage {
+  color: var(--gray-400);
+  font-size: 1.1rem;
+}
+
+/* Grid Layout */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.productCard {
+  background-color: white;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-fast);
+}
+
+.productCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-300);
+}
+
+.imageWrapper {
+  position: relative;
+  height: 180px;
+  background-color: var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.inactiveImage {
+  opacity: 0.5;
+}
+
+.placeholderImage {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.favoriteButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: white;
+  border: 1px solid var(--gray-300);
+  color: var(--gray-400);
+  font-size: 1.5rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+  padding: 0;
+}
+
+.favoriteButton:hover {
+  transform: scale(1.1);
+  color: #D32F2F;
+}
+
+.favoriteButton.isFavorite {
+  color: #D32F2F;
+  background-color: white;
+}
+
+.productInfo {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: var(--spacing-xs);
+}
+
+.productName {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gray-500);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.productDesc {
+  font-size: 0.85rem;
+  color: var(--gray-400);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 2.4rem;
+  line-height: 1.2rem;
+}
+
+.ratingContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.stars {
+  display: flex;
+  color: #FFD700;
+}
+
+.starFilled {
+  font-size: 1.1rem;
+}
+
+.starHalf {
+  position: relative;
+  display: inline-block;
+  font-size: 1.1rem;
+}
+
+.starEmpty {
+  color: var(--gray-300);
+  font-size: 1.1rem;
+}
+
+.ratingText {
+  font-size: 0.8rem;
+  color: var(--gray-400);
+}
+
+.priceContainer {
+  margin-top: auto;
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-xs);
+}
+
+.currentPrice {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-500);
+}
+
+.oldPrice {
+  font-size: 0.9rem;
+  color: var(--gray-400);
+  text-decoration: line-through;
+}
+
+@media (max-width: 768px) {
+  .catalogContainer {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
+}

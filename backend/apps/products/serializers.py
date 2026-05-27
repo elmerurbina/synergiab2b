@@ -32,12 +32,23 @@ class ProductoListSerializer(serializers.ModelSerializer):
     precio_actual = serializers.SerializerMethodField()
     imagen_principal = serializers.SerializerMethodField()
     imagenes_list = serializers.SerializerMethodField()
+    promedio_valoracion = serializers.SerializerMethodField()
+    total_valoraciones = serializers.SerializerMethodField()
     
     class Meta:
         model = Producto
         fields = ('id', 'nombre', 'descripcion_corta', 'precio', 'precio_oferta', 
                  'precio_actual', 'categoria_id', 'proveedor_id', 'imagen_principal', 
-                 'imagenes_list', 'visitas', 'ubicacion_id', 'estado', 'stock')
+                 'imagenes_list', 'visitas', 'ubicacion_id', 'estado', 'stock',
+                 'promedio_valoracion', 'total_valoraciones')
+    
+    def get_promedio_valoracion(self, obj):
+        from django.db.models import Avg
+        val = obj.valoraciones.aggregate(avg=Avg('puntuacion'))['avg']
+        return round(val, 2) if val is not None else 0.0
+
+    def get_total_valoraciones(self, obj):
+        return obj.valoraciones.count()
     
     def get_precio_actual(self, obj):
         if obj.precio_oferta and obj.precio_oferta < obj.precio:
@@ -84,6 +95,8 @@ class ProductoDetailSerializer(serializers.ModelSerializer):
     es_patrocinado = serializers.SerializerMethodField()
     precio_actual = serializers.SerializerMethodField()
     imagen_principal = serializers.SerializerMethodField()
+    promedio_valoracion = serializers.SerializerMethodField()
+    total_valoraciones = serializers.SerializerMethodField()
     
     class Meta:
         model = Producto
@@ -91,7 +104,16 @@ class ProductoDetailSerializer(serializers.ModelSerializer):
                  'precio_oferta', 'precio_actual', 'stock', 'unidad_medida', 
                  'categoria', 'categoria_info', 'proveedor', 'proveedor_info',
                  'ubicacion', 'estado', 'visitas', 'imagenes', 'etiquetas', 
-                 'es_patrocinado', 'imagen_principal', 'fecha_creacion', 'fecha_actualizacion')
+                 'es_patrocinado', 'imagen_principal', 'fecha_creacion', 'fecha_actualizacion',
+                 'promedio_valoracion', 'total_valoraciones')
+    
+    def get_promedio_valoracion(self, obj):
+        from django.db.models import Avg
+        val = obj.valoraciones.aggregate(avg=Avg('puntuacion'))['avg']
+        return round(val, 2) if val is not None else 0.0
+
+    def get_total_valoraciones(self, obj):
+        return obj.valoraciones.count()
     
     def get_precio_actual(self, obj):
         if obj.precio_oferta and obj.precio_oferta < obj.precio:

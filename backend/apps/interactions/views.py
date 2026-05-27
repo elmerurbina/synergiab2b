@@ -327,3 +327,145 @@ class TopProductosView(APIView):
             'limite': limite,
             'resultados': serializer.data
         })
+
+
+from .models import Valoracion
+from .serializers import ValoracionSerializer
+
+class ValoracionCreateUpdateView(APIView):
+    """
+    Crear o actualizar la valoración de un producto por el comprador autenticado.
+    
+    Body:
+    {
+        "producto_id": 1,
+        "puntuacion": 5,
+        "comentario": "Excelente producto"
+    }
+    """
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        if request.user.rol != 'comprador':
+            return Response({
+                'error': 'Solo los compradores pueden valorar productos'
+            }, status=status.HTTP_403_FORBIDDEN)
+            
+        producto_id = request.data.get('producto') or request.data.get('producto_id')
+        puntuacion = request.data.get('puntuacion')
+        comentario = request.data.get('comentario', '')
+        
+        if not producto_id or puntuacion is None:
+            return Response({
+                'error': 'producto_id y puntuacion son requeridos'
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
+        try:
+            puntuacion = int(puntuacion)
+            if puntuacion < 1 or puntuacion > 5:
+                raise ValueError()
+        except ValueError:
+            return Response({
+                'error': 'puntuacion debe ser un número entero entre 1 y 5'
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
+        producto = Producto.objects.filter(id=producto_id, estado='activo').first()
+        if not producto:
+            return Response({
+                'error': 'Producto no encontrado o inactivo'
+            }, status=status.HTTP_404_NOT_FOUND)
+            
+        valoracion, created = Valoracion.objects.update_or_create(
+            usuario=request.user,
+            producto=producto,
+            defaults={
+                'puntuacion': puntuacion,
+                'comentario': comentario
+            }
+        )
+        
+        serializer = ValoracionSerializer(valoracion, context={'request': request})
+        message = 'Valoración registrada exitosamente' if created else 'Valoración actualizada exitosamente'
+        return Response({
+            'message': message,
+            'data': serializer.data
+        }, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+
+
+class ValoracionListView(generics.ListAPIView):
+    """
+    Lista de valoraciones de un producto específico.
+    Parámetros de consulta:
+    - producto_id: ID del producto (requerido)
+    """
+    serializer_class = ValoracionSerializer
+    permission_classes = [AllowAny]
+    
+    def get_queryset(self):
+        producto_id = self.request.query_params.get('producto_id') or self.request.query_params.get('producto')
+        if not producto_id:
+            return Valoracion.objects.none()
+        return Valoracion.objects.filter(producto_id=producto_id)
+        
+    def list(self, request, *args, **kwargs):
+        producto_id = self.request.query_params.get('producto_id') or self.request.query_params.get('producto')
+        if not producto_id:
+            return Response({
+                'error': 'producto_id es requerido como parámetro de consulta'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        return super().list(request, *args, **kwargs)
+
+
+class ValoracionDeleteView(APIView):
+    """
+    Eliminar la valoración del usuario autenticado para un producto.
+    """
+    permission_classes = [IsAuthenticated]
+    
+    def delete(self, request, producto_id):
+        valoracion = Valoracion.objects.filter(
+            usuario=request.user,
+            producto_id=producto_id
+        ).first()
+        
+        if valoracion:
+            valoracion.delete()
+            return Response({
+                'message': 'Valoración eliminada exitosamente'
+            }, status=status.HTTP_200_OK)
+            
+        return Response({
+            'error': 'Valoración no encontrada'
+        }, status=status.HTTP_404_NOT_FOUND)
+
+
+class ValoracionUsuarioProductoView(APIView):
+    """
+    Obtener la valoración del usuario autenticado para un producto específico.
+    """
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, producto_id):
+        valoracion = Valoracion.objects.filter(
+            usuario=request.user,
+            producto_id=producto_id
+        ).first()
+        
+        if valoracion:
+            serializer = ValoracionSerializer(valoracion, context={'request': request})
+            return Response(serializer.data)
+            
+        return Response({
+            'valorado': False
+        }, status=status.HTTP_404_NOT_FOUND)
+
+
+class ValoracionUsuarioListView(generics.ListAPIView):
+    """
+    Lista de valoraciones creadas por el usuario autenticado.
+    """
+    serializer_class = ValoracionSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return Valoracion.objects.filter(usuario=self.request.user)

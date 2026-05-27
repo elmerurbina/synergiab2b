@@ -30,3 +30,26 @@ class Interaccion(models.Model):
     
     def __str__(self):
         return f"{self.producto.nombre} - {self.tipo} - {self.fecha}"
+
+
+class Valoracion(models.Model):
+    from django.core.validators import MinValueValidator, MaxValueValidator
+    
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='valoraciones')
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE, related_name='valoraciones')
+    puntuacion = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        verbose_name='Puntuación'
+    )
+    comentario = models.TextField(blank=True, null=True, verbose_name='Comentario')
+    fecha = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de valoración')
+
+    class Meta:
+        db_table = 'valoraciones'
+        ordering = ['-fecha']
+        unique_together = ('usuario', 'producto')
+        verbose_name = 'Valoración'
+        verbose_name_plural = 'Valoraciones'
+
+    def __str__(self):
+        return f"{self.usuario.email} - {self.producto.nombre} - {self.puntuacion}"

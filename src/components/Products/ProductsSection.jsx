@@ -328,7 +328,7 @@ const ProductsSection = () => {
   };
 
   return (
-    <section className={styles.productsSection}>
+    <section id="explorar-seccion" className={styles.productsSection}>
       <div className={styles.container}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>

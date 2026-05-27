@@ -1,0 +1,247 @@
+.testimonialsSection {
+  background-color: var(--gray-200);
+  padding: var(--spacing-2xl) var(--spacing-md);
+  overflow: hidden;
+  position: relative;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.subtitle {
+  color: var(--primary-500);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: var(--spacing-xs);
+}
+
+.title {
+  color: var(--gray-500);
+  font-size: 2.25rem;
+  font-family: var(--font-primary);
+  font-weight: 700;
+  margin: 0;
+}
+
+.underline {
+  height: 4px;
+  width: 60px;
+  background: linear-gradient(90deg, var(--primary-500), var(--tertiary-500));
+  margin: var(--spacing-sm) auto 0;
+  border-radius: var(--radius-sm);
+}
+
+.carouselContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 380px;
+}
+
+.cardWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  height: 320px;
+  margin: 0 var(--spacing-lg);
+}
+
+.testimonialCard {
+  background-color: var(--gray-100);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: all var(--transition-slow);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.testimonialCard.activeSlide {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  z-index: 10;
+}
+
+.testimonialCard.prevSlide {
+  transform: translateX(-100px) scale(0.85);
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.testimonialCard.nextSlide {
+  transform: translateX(100px) scale(0.85);
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.quoteIcon {
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--primary-200);
+  position: absolute;
+  top: var(--spacing-sm);
+  left: var(--spacing-md);
+  opacity: 0.3;
+  font-family: serif;
+}
+
+.text {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: var(--gray-500);
+  font-style: italic;
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  margin-top: var(--spacing-md);
+}
+
+.rating {
+  margin: var(--spacing-md) 0;
+}
+
+.starFilled {
+  color: #FFD700;
+  font-size: 1.25rem;
+  margin-right: var(--spacing-xs);
+}
+
+.starEmpty {
+  color: var(--gray-300);
+  font-size: 1.25rem;
+  margin-right: var(--spacing-xs);
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--gray-300);
+  padding-top: var(--spacing-md);
+  margin-top: var(--spacing-sm);
+}
+
+.avatar {
+  font-size: 2.25rem;
+  background-color: var(--primary-100);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--spacing-md);
+  border: 2px solid var(--primary-300);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--gray-500);
+  font-weight: 600;
+}
+
+.role {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--gray-400);
+}
+
+.company {
+  color: var(--secondary-500);
+  font-weight: 500;
+}
+
+.navButton {
+  background-color: var(--gray-100);
+  border: 1px solid var(--gray-300);
+  color: var(--gray-500);
+  font-size: 2rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  z-index: 20;
+  box-shadow: var(--shadow-sm);
+}
+
+.navButton:hover {
+  background-color: var(--primary-500);
+  color: white;
+  border-color: var(--primary-500);
+  box-shadow: var(--shadow-md);
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--gray-300);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  padding: 0;
+}
+
+.dot.activeDot {
+  background-color: var(--primary-500);
+  width: 24px;
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 768px) {
+  .carouselContainer {
+    flex-direction: column;
+    min-height: auto;
+  }
+  
+  .cardWrapper {
+    height: 380px;
+    margin: var(--spacing-lg) 0;
+  }
+
+  .navButton {
+    display: none; /* hide arrow buttons on mobile and use dots */
+  }
+
+  .text {
+    font-size: 1rem;
+  }
+}

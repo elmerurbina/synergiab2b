@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Button from '../UI/Button/Button';
 import Input from '../UI/Input/Input';
 import styles from './Hero.module.css';
 
-const Hero = () => {
+const Hero = ({ onSearch }) => {
   const canvasRef = useRef(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -140,6 +141,13 @@ const Hero = () => {
 
   const trustBadges = ['🏆', '⭐', '🔒', '🚀'];
 
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (onSearch) {
+      onSearch(searchTerm);
+    }
+  };
+
   return (
     <section className={styles.hero}>
       <div className={styles.canvasBackground}>
@@ -162,21 +170,25 @@ const Hero = () => {
             La plataforma inteligente que transforma la forma de hacer negocios en Nicaragua.
           </p>
 
-          <div className={styles.searchForm}>
+          <form onSubmit={handleSearchSubmit} className={styles.searchForm}>
             <div className={styles.searchInput}>
               <Input
                 type="search"
                 placeholder="Buscar productos, servicios o proveedores..."
                 size="large"
                 iconLeft="🔍"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <div className={styles.searchButton}>
-              <Button variant="primary" size="large">
+              <Button type="submit" variant="primary" size="large">
                 Explorar
               </Button>
             </div>
-          </div>
+          </form>
+
+
 
           <div className={styles.stats}>
             {stats.map((stat, index) => (
@@ -206,8 +218,8 @@ const Hero = () => {
               xmlns="http://www.w3.org/2000/svg"
             >
               {/* Connection nodes network illustration */}
-              <circle cx="200" cy="200" r="150" stroke="url(#gradient1)" strokeWidth="2" fill="none" strokeDasharray="5 5" opacity="0.3"/>
-              <circle cx="200" cy="200" r="100" stroke="url(#gradient2)" strokeWidth="1.5" fill="none" opacity="0.2"/>
+              <circle cx="200" cy="200" r="150" stroke="url(#gradient1)" strokeWidth="2" fill="none" strokeDasharray="5 5" opacity="0.3" />
+              <circle cx="200" cy="200" r="100" stroke="url(#gradient2)" strokeWidth="1.5" fill="none" opacity="0.2" />
 
               {/* Central hub */}
               <circle cx="200" cy="200" r="30" fill="url(#gradient1)" opacity="0.8">
