@@ -1,4 +1,8 @@
+// src/services/api.js
 import axiosInstance from './axios';
+
+// DEFAULT EXPORT - Add this line at the top
+export default axiosInstance;
 
 // Productos API
 export const productAPI = {

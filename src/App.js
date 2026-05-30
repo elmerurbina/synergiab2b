@@ -1,9 +1,10 @@
 // App.js
 import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify'; // ← Importar ToastContainer
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ProfileProvider } from './contexts/ProfileContext'; // Add this import
 import Layout from './components/Layout/Layout/Layout';
 import Hero from './components/Hero/Hero';
 import PopularCategories from './components/Categories/PopularCategories';
@@ -17,6 +18,7 @@ import CompradorHome from './pages/CompradorHome/CompradorHome';
 import ProductGrid from './components/Products/ProductGrid';
 import ProvidersSection from './components/Providers/ProvidersSection';
 import About from './pages/About/About';
+import VendedorProfile from './pages/Profile/Vendedor/VendedorProfile';
 import './styles/global.css';
 
 // Protected Route component
@@ -117,6 +119,15 @@ const AdminDashboard = () => {
     );
 };
 
+// Profile route wrapper with ProfileProvider
+const ProfileRouteWrapper = ({ children }) => {
+    return (
+        <ProfileProvider>
+            {children}
+        </ProfileProvider>
+    );
+};
+
 // Main App Content with routes
 const AppContent = () => {
     const { loading } = useAuth();
@@ -164,6 +175,18 @@ const AppContent = () => {
                         <PublicRoute>
                             <Register />
                         </PublicRoute>
+                    } 
+                />
+
+                {/* Profile Route - Wrapped with ProfileProvider */}
+                <Route 
+                    path="/profile/vendedor" 
+                    element={
+                        <ProtectedRoute allowedRoles={['proveedor']}>
+                            <ProfileRouteWrapper>
+                                <VendedorProfile />
+                            </ProfileRouteWrapper>
+                        </ProtectedRoute>
                     } 
                 />
                 

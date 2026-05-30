@@ -92,7 +92,10 @@ class ProfileView(APIView):
                 ).count(),
                 'total_visitas': Producto.objects.filter(
                     proveedor=request.user
-                ).aggregate(total=Sum('visitas'))['total'] or 0
+                ).aggregate(total=Sum('visitas'))['total'] or 0,
+                'total_interacciones': Interaccion.objects.filter(
+                    producto__proveedor=request.user
+                ).count()
             }
         elif request.user.rol == 'comprador':
             data['stats'] = {
@@ -102,10 +105,18 @@ class ProfileView(APIView):
         return Response(data)
     
     def put(self, request):
+        # Allow partial updates for profile customization
         serializer = UserSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
+            # Handle profile image if present
+            if 'profile_image' in request.FILES:
+                request.user.profile_image = request.FILES['profile_image']
+            
             serializer.save()
-            return Response(serializer.data)
+            return Response({
+                'user': serializer.data,
+                'message': 'Perfil actualizado exitosamente'
+            })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
