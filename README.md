@@ -1,6 +1,5 @@
 # SinergiaB2B - Plataforma de Comercio B2B para Nicaragua
 
-![SinergiaB2B Banner](https://via.placeholder.com/1200x400/1A73E8/FFFFFF?text=SinergiaB2B)
 
 ## 📋 Descripción General
 
@@ -281,9 +280,10 @@ Frontend: ESLint + Prettier
 Backend: PEP 8 (usando flake8)
 
 📄 Licencia
-Este proyecto está bajo la Licencia MIT - ver el archivo LICENSE para más detalles.
+Este proyecto es privado, para uso comercial favor contactar a los desarrolladores. Se permite su uso libre solo para fines educativos, pero NO para comercializacion 
 
 📞 Contacto y Soporte
+
 Email: soporte@sinergiab2b.com
 
 
@@ -291,6 +291,7 @@ Email: soporte@sinergiab2b.com
 GitHub Issues: Reportar bug
 
 🙏 Agradecimientos
+
 A todos los emprendedores y empresas nicaragüenses que confían en nuestra plataforma
 
 Equipo de desarrollo y diseño por su dedicación y pasión
