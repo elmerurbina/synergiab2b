@@ -122,6 +122,14 @@ const ProductGrid = ({ initialSearch = '' }) => {
     return stars;
   };
 
+  // Get provider display name
+  const getProviderName = (product) => {
+    if (product.proveedor_info) {
+      return product.proveedor_info.empresa || product.proveedor_info.username;
+    }
+    return 'Proveedor';
+  };
+
   return (
     <div id="explorar-seccion" className={styles.catalogContainer}>
       <div className={styles.filterSection}>
@@ -237,6 +245,14 @@ const ProductGrid = ({ initialSearch = '' }) => {
                   </div>
 
                   <div className={styles.productInfo}>
+                    {/* Provider Name - New Section */}
+                    <div className={styles.providerSection}>
+                      <span className={styles.providerIcon}>🏪</span>
+                      <span className={styles.providerName}>
+                        {getProviderName(product)}
+                      </span>
+                    </div>
+
                     <h4 className={styles.productName}>{product.nombre}</h4>
                     <p className={styles.productDesc}>{product.descripcion_corta}</p>
                     

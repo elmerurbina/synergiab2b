@@ -18,6 +18,7 @@ import CompradorHome from './pages/CompradorHome/CompradorHome';
 import ProductGrid from './components/Products/ProductGrid';
 import ProvidersSection from './components/Providers/ProvidersSection';
 import About from './pages/About/About';
+import Contact from './pages/Contact/Contact';
 import VendedorProfile from './pages/Profile/Vendedor/VendedorProfile';
 import './styles/global.css';
 
@@ -25,7 +26,6 @@ import './styles/global.css';
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     const { isAuthenticated, user, loading } = useAuth();
     
-    console.log('🔒 ProtectedRoute - Auth:', { isAuthenticated, user, loading });
     
     if (loading) {
         return (
@@ -41,16 +41,16 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     }
     
     if (!isAuthenticated) {
-        console.log('🔒 ProtectedRoute - Not authenticated, redirecting to login');
+        
         return <Navigate to="/login" replace />;
     }
     
     if (allowedRoles.length > 0 && !allowedRoles.includes(user?.rol)) {
-        console.log(`🔒 ProtectedRoute - Role ${user?.rol} not allowed`);
+       
         return <Navigate to="/unauthorized" replace />;
     }
     
-    console.log('🔒 ProtectedRoute - Access granted');
+  
     return children;
 };
 
@@ -63,11 +63,11 @@ const PublicRoute = ({ children }) => {
     }
     
     if (isAuthenticated) {
-        console.log('🌍 PublicRoute - User logged in, redirecting to home');
+    
         return <Navigate to="/" replace />;
     }
     
-    console.log('🌍 PublicRoute - Access granted to public route');
+
     return children;
 };
 
@@ -76,7 +76,6 @@ const HomePage = () => {
     const { user, isAuthenticated } = useAuth();
     const [searchQuery, setSearchQuery] = useState('');
     
-    console.log('🏠 Rendering HomePage, auth:', isAuthenticated, 'role:', user?.rol);
     
     if (isAuthenticated) {
         if (user?.rol === 'proveedor') {
@@ -161,6 +160,7 @@ const AppContent = () => {
                     } 
                 />
                 <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
                 <Route 
                     path="/login" 
                     element={
