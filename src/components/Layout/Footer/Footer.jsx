@@ -225,7 +225,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className={styles.companySection}>
             <div className={styles.footerLogo}>
-              <img src="/logo.svg" alt="SinergiaB2B" />
+              <img src="/assets/logo.svg" alt="SinergiaB2B" />
               <span className={styles.footerLogoText}>SinergiaB2B</span>
             </div>
             <p className={styles.companyDescription}>
