@@ -1,70 +1,297 @@
-# Getting Started with Create React App
+# SinergiaB2B - Plataforma de Comercio B2B para Nicaragua
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![SinergiaB2B Banner](https://via.placeholder.com/1200x400/1A73E8/FFFFFF?text=SinergiaB2B)
 
-## Available Scripts
+## 📋 Descripción General
 
-In the project directory, you can run:
+SinergiaB2B es una plataforma tecnológica de comercio business-to-business (B2B) diseñada específicamente para el mercado nicaragüense. Nuestra misión es transformar la forma en que las empresas nicaragüenses se conectan, negocian y crecen juntas.
 
-### `npm start`
+### 🎯 Propósito
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+La plataforma elimina intermediarios y procesos tradicionales ineficientes, permitiendo que compradores y proveedores se conecten de manera directa, ágil y transparente a través de un ecosistema digital moderno e intuitivo.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### ✨ Características Principales
 
-### `npm test`
+- **Catálogo Digital Inteligente**: Búsqueda avanzada por categorías, precios, ubicación y más
+- **Conexión Directa vía WhatsApp**: Comunicación instantánea entre compradores y proveedores
+- **Dashboard de Proveedores**: Estadísticas en tiempo real, gestión de productos y análisis de rendimiento
+- **Sistema de Valoraciones**: Reputación transparente que genera confianza en el ecosistema
+- **Roles de Usuario**: Compradores, Proveedores y Administradores con permisos específicos
+- **Interfaz Responsive**: Experiencia optimizada en dispositivos móviles, tablets y desktop
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🚀 Tecnologías Utilizadas
 
-### `npm run build`
+### Frontend
+- **React 18** - Biblioteca para interfaces de usuario
+- **React Router DOM** - Navegación y enrutamiento
+- **CSS Modules** - Estilos encapsulados y mantenibles
+- **React Icons** - Iconografía moderna y consistente
+- **React Toastify** - Notificaciones interactivas
+- **Axios** - Cliente HTTP para API calls
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Backend
+- **Django 4.x** - Framework web Python de alto nivel
+- **Django REST Framework** - API RESTful robusta
+- **SQLite** - Base de datos relacional (desarrollo)
+- **Django CORS Headers** - Manejo de políticas CORS
+- **JWT Authentication** - Autenticación segura basada en tokens
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 📊 Estructura del Proyecto
+SinergiaB2B/
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+├── backend/ # API Django REST
 
-### `npm run eject`
+│ ├── api/ # Aplicación principal
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+│ │ ├── models.py # Modelos de datos
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+│ │ ├── views.py # Vistas y lógica de negocio
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+│ │ ├── serializers.py # Serializadores DRF
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+│ │ └── urls.py # Rutas de la API
 
-## Learn More
+│ ├── sinergiab2b/ # Configuración del proyecto
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+│ ├── manage.py # Script de gestión Django
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+│ └── requirements.txt # Dependencias Python
 
-### Code Splitting
+│
+├── frontend/ # Aplicación React
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+│ ├── public/ # Archivos estáticos
 
-### Analyzing the Bundle Size
+│ ├── src/
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+│ │ ├── components/ # Componentes reutilizables
 
-### Making a Progressive Web App
+│ │ ├── contexts/ # Contextos de React
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+│ │ ├── pages/ # Vistas principales
 
-### Advanced Configuration
+│ │ ├── services/ # Servicios API
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+│ │ ├── styles/ # Estilos globales
 
-### Deployment
+│ │ └── App.js # Componente principal
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+│ └── package.json # Dependencias Node.js
 
-### `npm run build` fails to minify
+│
+└── README.md # Documentación
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+
+## 🛠️ Instalación y Configuración
+
+### Requisitos Previos
+
+- **Python 3.12+** - [Descargar Python](https://www.python.org/downloads/)
+- **Node.js 18+** - [Descargar Node.js](https://nodejs.org/)
+- **Git** - [Descargar Git](https://git-scm.com/)
+- **pip** - Gestor de paquetes de Python (viene con Python)
+- **npm** - Gestor de paquetes de Node.js (viene con Node.js)
+
+### 1. Clonar el Repositorio
+
+`git clone https://github.com/elmerurbina/sinergiab2b.git`
+
+
+2. Configuración del Backend (Django)
+Navegar al directorio del backend:
+
+`cd backend`
+
+
+## Instalar dependencias de Python:
+
+`pip install -r requirements.txt`
+
+## Configurar variables de entorno:
+Crea un archivo .env en el directorio 
+backend/ con el siguiente contenido:
+
+```
+env
+SECRET_KEY=tu-clave-secreta-django-aqui
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+CORS_ALLOWED_ORIGINS=http://localhost:3000
+Nota: Para producción, genera una clave secreta segura usando:
+```
+python
+```
+from django.core.management.utils import get_random_secret_key
+print(get_random_secret_key())
+```
+
+## Ejecutar migraciones de base de datos (SQLite):
+```
+python manage.py makemigrations
+python manage.py migrate
+```
+### Crear superusuario (acceso admin):
+
+`python manage.py createsuperuser`
+
+_Sigue las instrucciones para crear un usuario administrador._
+
+Iniciar el servidor de desarrollo:
+
+`python manage.py runserver`
+
+El backend estará disponible en: *http://localhost:8000*
+
+API Admin: http://localhost:8000/admin
+
+API Endpoints: *http://localhost:8000/api/*
+
+## 3. Configuración del Frontend (React)
+
+Abrir una nueva terminal y navegar a la raíz del proyecto:
+
+
+**Si estás en el directorio backend, regresa a la raíz**
+
+`cd ..`
+
+Instalar dependencias de Node.js:
+
+`npm install --ignore-scripts`
+
+**Nota sobre --ignore-scripts: Este flag se utiliza para evitar posibles scripts maliciosos o problemas de compatibilidad con algunas dependencias.**
+
+## Configurar variables de entorno del frontend:
+
+Crea un archivo .env en la raíz del proyecto:
+
+env
+
+```
+REACT_APP_API_URL=http://localhost:8000/api
+REACT_APP_API_TIMEOUT=30000
+```
+
+Iniciar el servidor de desarrollo:
+
+`npm start`
+
+El frontend estará disponible en: http://localhost:3000
+
+🎮 Uso de la Plataforma
+Acceso a la aplicación
+Abre tu navegador y ve a http://localhost:3000
+
+Regístrate como nuevo usuario o inicia sesión
+
+Explora las diferentes secciones según tu rol:
+
+Roles y Funcionalidades
+🛍️ Comprador
+Navegar y buscar productos por categorías
+
+Ver detalles de productos
+
+Contactar proveedores vía WhatsApp
+
+Ver estadísticas básicas
+
+🏢 Proveedor
+Dashboard de Proveedor: Estadísticas de rendimiento
+
+Gestión de Catálogo: CRUD de productos
+
+Análisis de Visitas: Seguimiento de interacciones
+
+Métricas de WhatsApp: Clics y contactos
+
+👑 Administrador
+Panel de Administración: Gestión completa del sistema
+
+Gestión de Usuarios: Crear, modificar, eliminar usuarios
+
+Moderación de Productos: Validar y gestionar catálogos
+
+Estadísticas Globales: Métricas de toda la plataforma
+
+🔧 Solución de Problemas Comunes
+Error: products.slice is not a function
+Solución: Asegúrate de que la API está devolviendo un array. Verifica la respuesta en la consola del navegador.
+
+Error: CORS policy
+Solución: Verifica que CORS_ALLOWED_ORIGINS en backend .env incluya http://localhost:3000
+
+Error: Module not found
+Solución: Ejecuta npm install nuevamente sin el flag --ignore-scripts
+
+Error: Database table doesn't exist
+Solución: Ejecuta python manage.py migrate nuevamente
+
+El servidor no inicia (puerto en uso)
+Backend: Cambia el puerto: python manage.py runserver 8001
+Frontend: Cambia el puerto: npm start -- --port 3001
+
+📦 Scripts Disponibles
+
+Backend
+```
+python manage.py runserver              # Inicia servidor
+python manage.py makemigrations         # Crea migraciones
+python manage.py migrate                # Aplica migraciones
+python manage.py createsuperuser        # Crea admin user
+python manage.py shell                  # Consola interactiva
+python manage.py test                   # Ejecuta tests
+
+```
+Frontend
+```
+npm start                               # Inicia servidor desarrollo
+npm run build                           # Construye para producción
+npm test                                # Ejecuta tests
+npm run eject                           # Expone configuración (irreversible)
+🌐 Variables de Entorno
+Backend (.env)
+env
+SECRET_KEY=tu-clave-secreta
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+CORS_ALLOWED_ORIGINS=http://localhost:3000
+Frontend (.env)
+env
+REACT_APP_API_URL=http://localhost:8000/api
+REACT_APP_API_TIMEOUT=30000
+```
+🤝 Contribución
+Fork el proyecto
+
+Crea tu rama de características (`git checkout -b feature/AmazingFeature`)
+
+Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+
+Push a la rama (`git push origin feature/AmazingFeature`)
+
+Abre un Pull Request
+
+Estándares de Código
+
+Frontend: ESLint + Prettier
+
+Backend: PEP 8 (usando flake8)
+
+📄 Licencia
+Este proyecto está bajo la Licencia MIT - ver el archivo LICENSE para más detalles.
+
+📞 Contacto y Soporte
+Email: soporte@sinergiab2b.com
+
+
+
+GitHub Issues: Reportar bug
+
+🙏 Agradecimientos
+A todos los emprendedores y empresas nicaragüenses que confían en nuestra plataforma
+
+Equipo de desarrollo y diseño por su dedicación y pasión
+
