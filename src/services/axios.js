@@ -4,14 +4,11 @@ const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8000/api',
     timeout: 15000,
     headers: {
-        Accept: 'application/json', // ✅ keep this
-        // ❌ DO NOT set Content-Type globally
+        Accept: 'application/json', 
     }
 });
 
-// ================================
-// 🔐 REQUEST INTERCEPTOR
-// ================================
+
 axiosInstance.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('access_token');
@@ -21,23 +18,18 @@ axiosInstance.interceptors.request.use(
             config.headers.Authorization = `Bearer ${token}`;
         }
 
-        // ✅ Only set JSON header if NOT FormData
         if (!(config.data instanceof FormData)) {
             config.headers['Content-Type'] = 'application/json';
         }
 
-        console.log(`📤 ${config.method?.toUpperCase()} ${config.url}`);
         return config;
     },
     (error) => {
-        console.error('📤 Request error:', error);
         return Promise.reject(error);
     }
 );
 
-// ================================
-// 🔄 RESPONSE INTERCEPTOR (REFRESH TOKEN)
-// ================================
+
 let isRefreshing = false;
 let failedQueue = [];
 
@@ -54,7 +46,6 @@ const processQueue = (error, token = null) => {
 
 axiosInstance.interceptors.response.use(
     (response) => {
-        console.log(`📥 ${response.status} ${response.config.url}`);
         return response;
     },
     async (error) => {

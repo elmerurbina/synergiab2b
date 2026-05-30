@@ -65,7 +65,6 @@ export const categoryAPI = {
         return axiosInstance.get(`/categorias/subcategorias/${parentId}/`);
     },
     
-    // ADD THIS METHOD HERE - NOT in interactionAPI
     createCategory: (data) => {
         return axiosInstance.post('/categorias/crear/', data);
     }
