@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ProductGrid from './ProductGrid';
 import {
   FaSearch,
   FaRocket,
@@ -27,7 +28,7 @@ import {
 } from 'react-icons/fa';
 import styles from './ProductsSection.module.css';
 
-const ProductsSection = () => {
+const ProductsSection = ({ initialSearch = '' }) => {
   const [activeTab, setActiveTab] = useState('productos');
 
   const tabs = [
@@ -175,26 +176,8 @@ const ProductsSection = () => {
   ];
 
   const renderProductosTab = () => (
-    <div className={styles.productsTheory}>
-      <div className={styles.theoryTitle}>
-        <FaSearch /> Gestión de Productos y Servicios
-      </div>
-      <p className={styles.theoryDescription}>
-        SinergiaB2B ofrece un sistema integral de gestión de catálogos diseñado específicamente
-        para el entorno empresarial B2B. Los proveedores pueden cargar sus productos con
-        especificaciones técnicas detalladas, mientras que los compradores acceden a un motor
-        de búsqueda optimizado que facilita el descubrimiento de soluciones comerciales.
-      </p>
-
-      <div className={styles.featuresGrid}>
-        {productFeatures.map((feature, index) => (
-          <div key={index} className={styles.featureCard}>
-            <div className={styles.featureIcon}>{feature.icon}</div>
-            <h3 className={styles.featureTitle}>{feature.title}</h3>
-            <p className={styles.featureDescription}>{feature.description}</p>
-          </div>
-        ))}
-      </div>
+    <div className={styles.productsLive}>
+      <ProductGrid initialSearch={initialSearch} />
     </div>
   );
 

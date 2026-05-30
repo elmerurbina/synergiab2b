@@ -1,5 +1,5 @@
 // App.js
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify'; // ← Importar ToastContainer
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,6 +12,9 @@ import TeamSection from './components/Team/TeamSection';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import ManageCatalog from './pages/ManageCatalog/ManageCatalog';
+import VendedorHome from './pages/VendedorHome/VendedorHome';
+import CompradorHome from './pages/CompradorHome/CompradorHome';
+import ProductGrid from './components/Products/ProductGrid';
 import './styles/global.css';
 
 // Protected Route component
@@ -66,11 +69,23 @@ const PublicRoute = ({ children }) => {
 
 // Home Page component
 const HomePage = () => {
-    console.log('🏠 Rendering HomePage');
+    const { user, isAuthenticated } = useAuth();
+    const [searchQuery, setSearchQuery] = useState('');
+    
+    console.log('🏠 Rendering HomePage, auth:', isAuthenticated, 'role:', user?.rol);
+    
+    if (isAuthenticated) {
+        if (user?.rol === 'proveedor') {
+            return <VendedorHome />;
+        } else if (user?.rol === 'comprador') {
+            return <CompradorHome />;
+        }
+    }
+    
     return (
         <>
-            <Hero />
-            <ProductsSection />
+            <Hero onSearch={setSearchQuery} />
+            <ProductsSection initialSearch={searchQuery} />
             <PopularCategories />
             <TeamSection />
         </>
@@ -123,6 +138,14 @@ const AppContent = () => {
             <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<HomePage />} />
+                <Route 
+                    path="/products" 
+                    element={
+                        <div style={{ padding: 'var(--spacing-xl) 0' }}>
+                            <ProductGrid />
+                        </div>
+                    } 
+                />
                 <Route 
                     path="/login" 
                     element={

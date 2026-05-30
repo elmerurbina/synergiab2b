@@ -145,6 +145,12 @@ const Hero = ({ onSearch }) => {
     e.preventDefault();
     if (onSearch) {
       onSearch(searchTerm);
+      setTimeout(() => {
+        const section = document.getElementById('explorar-seccion');
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
     }
   };
 
