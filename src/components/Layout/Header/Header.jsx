@@ -1,6 +1,5 @@
-// components/Header/Header.jsx
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../../contexts/AuthContext';
 import Button from '../../UI/Button/Button';
@@ -10,6 +9,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   console.log('Header - Render:', { isAuthenticated, user });
 
@@ -23,6 +23,14 @@ const Header = () => {
     toast.success('Sesión cerrada exitosamente');
     navigate('/login');
     setIsMenuOpen(false);
+  };
+
+  // Helper function to check if a link is active
+  const isActiveLink = (href) => {
+    if (href === '/') {
+      return location.pathname === href;
+    }
+    return location.pathname.startsWith(href);
   };
 
   const getNavLinks = () => {
@@ -63,7 +71,11 @@ const Header = () => {
 
         <nav className={styles.nav}>
           {navLinks.map((link) => (
-            <Link key={link.href} to={link.href} className={styles.navLink}>
+            <Link 
+              key={link.href} 
+              to={link.href} 
+              className={`${styles.navLink} ${isActiveLink(link.href) ? styles.active : ''}`}
+            >
               {link.label}
             </Link>
           ))}
@@ -133,7 +145,7 @@ const Header = () => {
           <Link 
             key={link.href} 
             to={link.href} 
-            className={styles.mobileNavLink}
+            className={`${styles.mobileNavLink} ${isActiveLink(link.href) ? styles.mobileActive : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             {link.label}
