@@ -15,6 +15,8 @@ import ManageCatalog from './pages/ManageCatalog/ManageCatalog';
 import VendedorHome from './pages/VendedorHome/VendedorHome';
 import CompradorHome from './pages/CompradorHome/CompradorHome';
 import ProductGrid from './components/Products/ProductGrid';
+import ProvidersSection from './components/Providers/ProvidersSection';
+import About from './pages/About/About';
 import './styles/global.css';
 
 // Protected Route component
@@ -86,6 +88,7 @@ const HomePage = () => {
         <>
             <Hero onSearch={setSearchQuery} />
             <ProductsSection initialSearch={searchQuery} />
+            <ProvidersSection onSelectProvider={setSearchQuery} />
             <PopularCategories />
             <TeamSection />
         </>
@@ -146,6 +149,7 @@ const AppContent = () => {
                         </div>
                     } 
                 />
+                <Route path="/about" element={<About />} />
                 <Route 
                     path="/login" 
                     element={

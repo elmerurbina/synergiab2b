@@ -1,0 +1,285 @@
+.aboutPage {
+  background-color: var(--gray-100);
+  min-height: 100vh;
+  padding-bottom: var(--spacing-2xl);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+}
+
+/* Hero Header */
+.aboutHero {
+  position: relative;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: white;
+  padding: var(--spacing-3xl) 0;
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  overflow: hidden;
+}
+
+.heroOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.heroBadge {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.heroTitle {
+  font-size: 2.75rem;
+  font-weight: 800;
+  margin: var(--spacing-md) 0;
+  line-height: 1.2;
+}
+
+.highlight {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.heroSubtitle {
+  font-size: 1.15rem;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+/* Story Section */
+.storySection {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--spacing-2xl);
+  align-items: center;
+  background: white;
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.storyText h2 {
+  font-size: 1.85rem;
+  color: var(--gray-600);
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+}
+
+.storyText p {
+  color: var(--gray-400);
+  line-height: 1.6;
+  font-size: 0.975rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.storyCard {
+  background: linear-gradient(135deg, var(--primary-100) 0%, var(--secondary-100) 100%);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  border: 1px solid var(--primary-200);
+}
+
+.storyCardIcon {
+  color: var(--primary-500);
+  margin-bottom: var(--spacing-md);
+}
+
+.storyCard h3 {
+  margin: 0 0 var(--spacing-sm) 0;
+  color: var(--primary-600);
+  font-size: 1.25rem;
+}
+
+.storyCard p {
+  color: var(--gray-500);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.statCard {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.statValue {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--primary-500);
+  margin-bottom: var(--spacing-xs);
+}
+
+.statLabel {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--gray-600);
+  margin-bottom: var(--spacing-sm);
+}
+
+.statDesc {
+  font-size: 0.85rem;
+  color: var(--gray-400);
+  line-height: 1.4;
+}
+
+/* Mission & Vision */
+.missionVisionGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+}
+
+.mvCard {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.mvHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--gray-200);
+  padding-bottom: var(--spacing-sm);
+}
+
+.mvIcon {
+  font-size: 1.75rem;
+  color: var(--secondary-500);
+}
+
+.mvHeader h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--gray-600);
+}
+
+.mvCard p {
+  color: var(--gray-400);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Values Section */
+.valuesSection {
+  text-align: center;
+}
+
+.valuesTitle {
+  font-size: 1.85rem;
+  color: var(--gray-600);
+  margin-bottom: var(--spacing-xl);
+}
+
+.valuesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.valueCard {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.valueCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--secondary-200);
+}
+
+.valueIcon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--secondary-100);
+  color: var(--secondary-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin: 0 auto var(--spacing-md);
+}
+
+.valueTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--gray-600);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.valueDesc {
+  font-size: 0.875rem;
+  color: var(--gray-400);
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 992px) {
+  .storySection {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2rem;
+  }
+  .missionVisionGrid {
+    grid-template-columns: 1fr;
+  }
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+}

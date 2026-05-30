@@ -286,11 +286,44 @@ class ProveedorEstadisticasView(APIView):
             contactos=Count('id', filter=Q(tipo='contacto'))
         ).order_by('-total')
         
+        # Tendencias por día para los productos del proveedor (últimos 7 o 30 días)
+        days_map = {
+            'dia': 7,
+            'semana': 7,
+            'mes': 30,
+            'año': 30
+        }
+        days_to_calculate = days_map.get(periodo, 30)
+        
+        tendencia_diaria = []
+        for i in range(days_to_calculate):
+            dia = hoy - timedelta(days=i)
+            dia_inicio = dia.replace(hour=0, minute=0, second=0, microsecond=0)
+            dia_fin = dia.replace(hour=23, minute=59, second=59, microsecond=999999)
+            
+            dia_interacciones = interacciones.filter(
+                fecha__gte=dia_inicio,
+                fecha__lte=dia_fin
+            )
+            
+            vistas = dia_interacciones.filter(tipo='vista').count()
+            clicks = dia_interacciones.filter(tipo='click_whatsapp').count()
+            contactos = dia_interacciones.filter(tipo='contacto').count()
+            
+            tendencia_diaria.append({
+                'fecha': dia.strftime('%Y-%m-%d'),
+                'vistas': vistas,
+                'clicks_whatsapp': clicks,
+                'contactos': contactos,
+                'total': dia_interacciones.count()
+            })
+            
         return Response({
             'periodo': periodo,
             'total_productos': productos.count(),
             'total_interacciones': interacciones.count(),
-            'por_producto': list(stats_por_producto)
+            'por_producto': list(stats_por_producto),
+            'tendencia_diaria': tendencia_diaria[::-1]
         })
 
 

@@ -281,3 +281,106 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ========== Chart Section ========== */
+.chartSection {
+  background-color: var(--gray-100);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--gray-200);
+  padding-bottom: var(--spacing-md);
+}
+
+.chartTitle {
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--gray-500);
+  display: flex;
+  align-items: center;
+}
+
+.chartSubtitle {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--gray-400);
+}
+
+.chartBody {
+  padding-top: var(--spacing-sm);
+}
+
+/* Period Selector */
+.periodSelector {
+  display: flex;
+  gap: var(--spacing-xs);
+  background-color: var(--gray-200);
+  padding: 4px;
+  border-radius: var(--radius-md);
+}
+
+.periodBtn {
+  background: none;
+  border: none;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gray-400);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.periodBtn:hover {
+  color: var(--primary-500);
+  background-color: white;
+}
+
+.activePeriod {
+  background-color: white !important;
+  color: var(--primary-500) !important;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Chart Loading Spinner */
+.chartLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  gap: var(--spacing-md);
+  color: var(--gray-400);
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 4px solid var(--primary-100);
+  border-top: 4px solid var(--primary-500);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Expanded 6-col stats grid */
+.statsGrid {
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+}
+

@@ -173,3 +173,13 @@ export const ratingAPI = {
         return axiosInstance.get(`/interacciones/valoraciones/producto/${productoId}/`);
     }
 };
+
+// Proveedores (Providers) API
+export const providerAPI = {
+    getProviders: (params = {}) => {
+        return axiosInstance.get('/auth/proveedores/', { params });
+    },
+    getProvider: (id) => {
+        return axiosInstance.get(`/auth/proveedores/${id}/`);
+    }
+};
