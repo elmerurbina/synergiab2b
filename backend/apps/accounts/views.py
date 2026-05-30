@@ -81,9 +81,17 @@ class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request):
+        """Get user profile data"""
         serializer = UserSerializer(request.user)
         data = serializer.data
         
+        # Add profile image URL if exists
+        if request.user.foto_perfil:
+            data['profile_image'] = request.user.foto_perfil.url
+        else:
+            data['profile_image'] = None
+        
+        # Add statistics for proveedor role
         if request.user.rol == 'proveedor':
             data['stats'] = {
                 'total_productos': Producto.objects.filter(proveedor=request.user).count(),
@@ -105,19 +113,61 @@ class ProfileView(APIView):
         return Response(data)
     
     def put(self, request):
-        # Allow partial updates for profile customization
-        serializer = UserSerializer(request.user, data=request.data, partial=True)
-        if serializer.is_valid():
-            # Handle profile image if present
-            if 'profile_image' in request.FILES:
-                request.user.profile_image = request.FILES['profile_image']
-            
-            serializer.save()
-            return Response({
-                'user': serializer.data,
-                'message': 'Perfil actualizado exitosamente'
-            })
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        """Update user profile"""
+        user = request.user
+        data = request.data
+        
+        # Update basic fields
+        if 'empresa' in data:
+            user.empresa = data['empresa']
+        if 'username' in data:
+            # Check if username is taken
+            if User.objects.filter(username=data['username']).exclude(id=user.id).exists():
+                return Response(
+                    {'username': 'Este nombre de usuario ya está en uso'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            user.username = data['username']
+        if 'email' in data:
+            # Check if email is taken
+            if User.objects.filter(email=data['email']).exclude(id=user.id).exists():
+                return Response(
+                    {'email': 'Este correo ya está en uso'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            user.email = data['email']
+        if 'telefono' in data:
+            user.telefono = data['telefono']
+        if 'ubicacion' in data:
+            user.ubicacion = data['ubicacion']
+        if 'sitio_web' in data:
+            user.sitio_web = data['sitio_web']
+        if 'descripcion' in data:
+            user.descripcion = data['descripcion']
+        
+        # Handle profile image
+        if 'profile_image' in request.FILES:
+            user.foto_perfil = request.FILES['profile_image']
+        
+        # Save user
+        user.save()
+        
+        # Return updated user data
+        serializer = UserSerializer(user)
+        response_data = serializer.data
+        if user.foto_perfil:
+            response_data['profile_image'] = user.foto_perfil.url
+        else:
+            response_data['profile_image'] = None
+        
+        return Response({
+            'user': response_data,
+            'message': 'Perfil actualizado exitosamente'
+        })
+    
+    def patch(self, request):
+        """Partial update user profile"""
+        return self.put(request)
 
 
 class ChangePasswordView(APIView):
