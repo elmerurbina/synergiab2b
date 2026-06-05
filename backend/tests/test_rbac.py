@@ -23,7 +23,6 @@ def test_create_product_allowed_for_proveedor(auth_client, proveedor_user, test_
     assert response.status_code == 201
     assert Producto.objects.filter(nombre="Laptop Asus Zenbook").exists()
     
-    # Check that it sets the provider to the authenticated user
     product = Producto.objects.get(nombre="Laptop Asus Zenbook")
     assert product.proveedor == proveedor_user
 
@@ -90,10 +89,10 @@ def test_update_product_denied_for_other_proveedor(auth_client, other_proveedor_
     }
     
     response = client.put(url, data, format='json')
-    # Because of get_queryset filtering, the resource won't be found for this user
+
     assert response.status_code == 404
     
-    # Verify product was NOT updated
+
     test_product.refresh_from_db()
     assert test_product.nombre != "Laptop Dell Latitude Hackeado"
     assert test_product.precio != 1.00

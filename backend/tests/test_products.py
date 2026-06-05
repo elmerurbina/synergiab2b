@@ -10,7 +10,6 @@ def test_list_products(api_client, test_product):
     url = reverse('product-list')
     response = api_client.get(url)
     assert response.status_code == 200
-    # The list is paginated
     assert 'results' in response.data
     assert len(response.data['results']) == 1
     assert response.data['results'][0]['nombre'] == test_product.nombre
@@ -22,12 +21,10 @@ def test_retrieve_product_detail_increments_visits(api_client, test_product):
     url = reverse('product-detail', kwargs={'pk': test_product.pk})
     response = api_client.get(url)
     assert response.status_code == 200
-    
-    # Reload from DB
+
     test_product.refresh_from_db()
     assert test_product.visitas == 1
-    
-    # Verify interaction was created
+
     assert Interaccion.objects.filter(producto=test_product, tipo='vista').exists()
 
 @pytest.mark.django_db
@@ -35,7 +32,6 @@ def test_filter_products_by_category_and_price(api_client, test_product, test_ca
     """Verify filtering products by category and price range"""
     url = reverse('product-list')
     
-    # Filter matching our test product (price 1200.00, category Technology)
     response = api_client.get(url, {
         'categoria': test_category.id,
         'precio_min': 1000.00,
@@ -44,7 +40,6 @@ def test_filter_products_by_category_and_price(api_client, test_product, test_ca
     assert response.status_code == 200
     assert len(response.data['results']) == 1
     
-    # Filter outside our test product price
     response_no_match = api_client.get(url, {
         'precio_min': 1300.00
     })
