@@ -1,0 +1,16 @@
+{
+    "experimentalServices": {
+        "frontend": {
+            "routePrefix": "/",
+            "framework": "create-react-app"
+        },
+        "backend": {
+            "root": "backend",
+            "routePrefix": "/_/backend",
+            "framework": null,
+            "entrypoint": "manage.py",
+            "builder": "vercel-python",
+            "runtime": "python3.9"
+        }
+    }
+}
