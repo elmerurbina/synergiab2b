@@ -1,4 +1,3 @@
-# apps/accounts/serializers.py
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import authenticate
@@ -7,6 +6,7 @@ from .models import User
 
 class UserSerializer(serializers.ModelSerializer):
     rol_display = serializers.CharField(source='get_rol_display', read_only=True)
+    profile_image = serializers.SerializerMethodField()
     
     class Meta:
         model = User
@@ -15,13 +15,13 @@ class UserSerializer(serializers.ModelSerializer):
                  'profile_image', 'foto_perfil', 'fecha_creacion', 'fecha_actualizacion')
         read_only_fields = ('id', 'fecha_creacion', 'fecha_actualizacion')
     
-    def to_representation(self, instance):
-        """Customize the representation to handle both field names"""
-        data = super().to_representation(instance)
-        # Ensure profile_image is available even if using old field name
-        if not data.get('profile_image') and data.get('foto_perfil'):
-            data['profile_image'] = data['foto_perfil']
-        return data
+    def get_profile_image(self, obj):
+        if obj.foto_perfil and hasattr(obj.foto_perfil, 'url'):
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.foto_perfil.url)
+            return obj.foto_perfil.url
+        return None
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -84,18 +84,12 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 class UpdateProfileSerializer(serializers.ModelSerializer):
     """Serializer specifically for updating user profile"""
+    profile_image = serializers.ImageField(required=False, write_only=True)
     
     class Meta:
         model = User
-        fields = ('username', 'email', 'telefono', 'empresa', 'ubicacion', 
-                 'sitio_web', 'descripcion', 'profile_image', 'foto_perfil')
-        read_only_fields = ('email',)  # Email is read-only to prevent changes
-    
-    def validate_email(self, value):
-        """Prevent email change"""
-        if self.instance and self.instance.email != value:
-            raise serializers.ValidationError("No se puede cambiar el correo electrónico")
-        return value
+        fields = ('username', 'telefono', 'empresa', 'ubicacion', 
+                 'sitio_web', 'descripcion', 'ruc', 'direccion', 'profile_image')
     
     def validate_username(self, value):
         """Validate username uniqueness"""
@@ -105,15 +99,16 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
         return value
     
     def update(self, instance, validated_data):
-        # Handle profile_image if present
-        if 'profile_image' in validated_data:
-            instance.foto_perfil = validated_data.get('profile_image')
-            validated_data.pop('profile_image', None)
+        # Handle profile_image
+        profile_image = validated_data.pop('profile_image', None)
         
-        # Handle foto_perfil (legacy field)
-        if 'foto_perfil' in validated_data:
-            instance.foto_perfil = validated_data['foto_perfil']
-            validated_data.pop('foto_perfil', None)
+        if profile_image:
+            # Delete old image if exists
+            if instance.foto_perfil and hasattr(instance.foto_perfil, 'path'):
+                import os
+                if os.path.isfile(instance.foto_perfil.path):
+                    os.remove(instance.foto_perfil.path)
+            instance.foto_perfil = profile_image
         
         # Update other fields
         for attr, value in validated_data.items():

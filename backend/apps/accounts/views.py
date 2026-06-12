@@ -1,21 +1,23 @@
-# apps/accounts/views.py
 from rest_framework import generics, filters, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from django.conf import settings
 from django.db.models import Sum
 from rest_framework.pagination import PageNumberPagination
 from .models import User
 from .serializers import (
-    UserSerializer, RegisterSerializer, LoginSerializer, ChangePasswordSerializer
+    UserSerializer, RegisterSerializer, LoginSerializer, ChangePasswordSerializer,
+    UpdateProfileSerializer
 )
 from apps.products.models import Producto
 from apps.favorites.models import Favorito
 from apps.interactions.models import Interaccion
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -79,6 +81,7 @@ class LogoutView(APIView):
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
     
     def get(self, request):
         """Get user profile data"""
@@ -86,8 +89,8 @@ class ProfileView(APIView):
         data = serializer.data
         
         # Add profile image URL if exists
-        if request.user.foto_perfil:
-            data['profile_image'] = request.user.foto_perfil.url
+        if request.user.foto_perfil and hasattr(request.user.foto_perfil, 'url'):
+            data['profile_image'] = request.build_absolute_uri(request.user.foto_perfil.url)
         else:
             data['profile_image'] = None
         
@@ -113,41 +116,54 @@ class ProfileView(APIView):
         return Response(data)
     
     def put(self, request):
-        """Update user profile"""
+        """Update user profile with image support"""
         user = request.user
-        data = request.data
+        data = request.data.copy() if hasattr(request.data, 'copy') else request.data
         
-        # Update basic fields
-        if 'empresa' in data:
+        # Handle profile image from FormData or JSON
+        if request.FILES.get('profile_image'):
+            # Delete old image if exists
+            if user.foto_perfil and os.path.isfile(user.foto_perfil.path):
+                os.remove(user.foto_perfil.path)
+            
+            user.foto_perfil = request.FILES['profile_image']
+        elif request.FILES.get('foto_perfil'):
+            # Handle legacy field name
+            if user.foto_perfil and os.path.isfile(user.foto_perfil.path):
+                os.remove(user.foto_perfil.path)
+            
+            user.foto_perfil = request.FILES['foto_perfil']
+        
+        # Update text fields
+        if 'empresa' in data and data['empresa'] is not None:
             user.empresa = data['empresa']
-        if 'username' in data:
+        
+        if 'username' in data and data['username'] is not None:
             # Check if username is taken
             if User.objects.filter(username=data['username']).exclude(id=user.id).exists():
                 return Response(
-                    {'username': 'Este nombre de usuario ya está en uso'},
+                    {'error': 'Este nombre de usuario ya está en uso'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
             user.username = data['username']
-        if 'email' in data:
-            # Check if email is taken
-            if User.objects.filter(email=data['email']).exclude(id=user.id).exists():
-                return Response(
-                    {'email': 'Este correo ya está en uso'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            user.email = data['email']
-        if 'telefono' in data:
+        
+        if 'telefono' in data and data['telefono'] is not None:
             user.telefono = data['telefono']
-        if 'ubicacion' in data:
+        
+        if 'ubicacion' in data and data['ubicacion'] is not None:
             user.ubicacion = data['ubicacion']
-        if 'sitio_web' in data:
+        
+        if 'sitio_web' in data and data['sitio_web'] is not None:
             user.sitio_web = data['sitio_web']
-        if 'descripcion' in data:
+        
+        if 'descripcion' in data and data['descripcion'] is not None:
             user.descripcion = data['descripcion']
         
-        # Handle profile image
-        if 'profile_image' in request.FILES:
-            user.foto_perfil = request.FILES['profile_image']
+        if 'ruc' in data and data['ruc'] is not None:
+            user.ruc = data['ruc']
+        
+        if 'direccion' in data and data['direccion'] is not None:
+            user.direccion = data['direccion']
         
         # Save user
         user.save()
@@ -155,8 +171,10 @@ class ProfileView(APIView):
         # Return updated user data
         serializer = UserSerializer(user)
         response_data = serializer.data
-        if user.foto_perfil:
-            response_data['profile_image'] = user.foto_perfil.url
+        
+        # Add full image URL
+        if user.foto_perfil and hasattr(user.foto_perfil, 'url'):
+            response_data['profile_image'] = request.build_absolute_uri(user.foto_perfil.url)
         else:
             response_data['profile_image'] = None
         
@@ -226,6 +244,7 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 class ProveedorListView(generics.ListAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
+    pagination_class = UserPagination
     
     def get_queryset(self):
         return User.objects.filter(rol='proveedor', estado=True)

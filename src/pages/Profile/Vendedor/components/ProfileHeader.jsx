@@ -1,6 +1,5 @@
-// src/pages/Profile/Vendedor/components/ProfileHeader.jsx
 import React from 'react';
-import { FaStore, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa';
+import { FaStore, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaIdCard } from 'react-icons/fa';
 import styles from '../VendedorProfile.module.css';
 
 const ProfileHeader = ({ profile, stats }) => {
@@ -20,7 +19,9 @@ const ProfileHeader = ({ profile, stats }) => {
       
       <div className={styles.profileInfo}>
         <h1 className={styles.profileName}>{profile?.empresa || profile?.username}</h1>
-        <p className={styles.profileRole}>Proveedor Verificado</p>
+        <p className={styles.profileRole}>
+          {profile?.rol === 'proveedor' ? 'Proveedor Verificado' : profile?.rol}
+        </p>
         
         <div className={styles.profileDetails}>
           {profile?.email && (
@@ -41,11 +42,23 @@ const ProfileHeader = ({ profile, stats }) => {
               <span>{profile.ubicacion}</span>
             </div>
           )}
+          {profile?.ruc && (
+            <div className={styles.detailItem}>
+              <FaIdCard />
+              <span>RUC: {profile.ruc}</span>
+            </div>
+          )}
           <div className={styles.detailItem}>
             <FaCalendarAlt />
-            <span>Miembro desde {new Date(profile?.fecha_creacion).toLocaleDateString('es-ES')}</span>
+            <span>Miembro desde {profile?.fecha_creacion ? new Date(profile.fecha_creacion).toLocaleDateString('es-ES') : 'Reciente'}</span>
           </div>
         </div>
+        
+        {profile?.descripcion && (
+          <div className={styles.profileBio}>
+            <p>{profile.descripcion}</p>
+          </div>
+        )}
       </div>
 
       {stats && (

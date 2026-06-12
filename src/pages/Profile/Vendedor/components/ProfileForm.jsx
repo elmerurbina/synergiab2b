@@ -1,17 +1,17 @@
-// src/pages/Profile/Vendedor/components/ProfileForm.jsx
 import React, { useState } from 'react';
-import { FaSave, FaTimes, FaUpload, FaBuilding, FaEnvelope, FaUser, FaPhone, FaMapMarkerAlt, FaGlobe } from 'react-icons/fa';
+import { FaSave, FaTimes, FaUpload, FaBuilding, FaEnvelope, FaUser, FaPhone, FaMapMarkerAlt, FaGlobe, FaIdCard, FaMapPin } from 'react-icons/fa';
 import styles from '../VendedorProfile.module.css';
 
 const ProfileForm = ({ profile, onSave, onCancel, loading }) => {
   const [formData, setFormData] = useState({
     empresa: profile?.empresa || '',
     username: profile?.username || '',
-    email: profile?.email || '',
     telefono: profile?.telefono || '',
     ubicacion: profile?.ubicacion || '',
     sitio_web: profile?.sitio_web || '',
     descripcion: profile?.descripcion || '',
+    ruc: profile?.ruc || '',
+    direccion: profile?.direccion || '',
   });
   
   const [selectedImage, setSelectedImage] = useState(null);
@@ -46,10 +46,22 @@ const ProfileForm = ({ profile, onSave, onCancel, loading }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Prepare data for submission
     const submitData = { ...formData };
+    
+    // Add profile_image if a new image was selected
     if (selectedImage) {
       submitData.profile_image = selectedImage;
     }
+    
+    // Remove any undefined values
+    Object.keys(submitData).forEach(key => {
+      if (submitData[key] === undefined) {
+        delete submitData[key];
+      }
+    });
+    
     await onSave(submitData);
   };
 
@@ -114,16 +126,15 @@ const ProfileForm = ({ profile, onSave, onCancel, loading }) => {
 
           <div className={styles.formGroup}>
             <label>
-              <FaEnvelope />
-              <span>Correo Electrónico *</span>
+              <FaIdCard />
+              <span>RUC</span>
             </label>
             <input
-              type="email"
-              name="email"
-              value={formData.email}
+              type="text"
+              name="ruc"
+              value={formData.ruc}
               onChange={handleChange}
-              required
-              placeholder="empresa@ejemplo.com"
+              placeholder="Número de RUC"
             />
           </div>
 
@@ -144,7 +155,7 @@ const ProfileForm = ({ profile, onSave, onCancel, loading }) => {
           <div className={styles.formGroup}>
             <label>
               <FaMapMarkerAlt />
-              <span>Ubicación</span>
+              <span>Ubicación/Ciudad</span>
             </label>
             <input
               type="text"
@@ -152,6 +163,20 @@ const ProfileForm = ({ profile, onSave, onCancel, loading }) => {
               value={formData.ubicacion}
               onChange={handleChange}
               placeholder="Managua, Nicaragua"
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label>
+              <FaMapPin />
+              <span>Dirección</span>
+            </label>
+            <input
+              type="text"
+              name="direccion"
+              value={formData.direccion}
+              onChange={handleChange}
+              placeholder="Dirección completa"
             />
           </div>
 
@@ -183,7 +208,7 @@ const ProfileForm = ({ profile, onSave, onCancel, loading }) => {
       </div>
 
       <div className={styles.formActions}>
-        <button type="button" onClick={onCancel} className={styles.cancelButton}>
+        <button type="button" onClick={onCancel} className={styles.cancelButton} disabled={loading}>
           <FaTimes />
           Cancelar
         </button>
