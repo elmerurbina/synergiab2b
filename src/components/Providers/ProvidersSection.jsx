@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { providerAPI } from '../../services/api';
-import { FaBuilding, FaPhoneAlt, FaMapMarkerAlt, FaEnvelope, FaWhatsapp, FaCheckCircle, FaChevronRight } from 'react-icons/fa';
+import { FaBuilding, FaPhoneAlt, FaMapMarkerAlt, FaEnvelope, FaWhatsapp, FaCheckCircle, FaChevronRight, FaStore } from 'react-icons/fa';
 import styles from './ProvidersSection.module.css';
 
 const ProvidersSection = ({ onSelectProvider }) => {
+  const navigate = useNavigate();
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,16 +27,20 @@ const ProvidersSection = ({ onSelectProvider }) => {
     fetchProviders();
   }, []);
 
-  const handleViewProducts = (companyName) => {
+  const handleViewCatalog = (providerId, companyName) => {
+    // Navigate to provider catalog page
+    navigate(`/proveedor/${providerId}/catalogo`);
+    
+    // If onSelectProvider is provided (for backwards compatibility), also trigger it
     if (onSelectProvider) {
       onSelectProvider(companyName);
-      setTimeout(() => {
-        const section = document.getElementById('explorar-seccion');
-        if (section) {
-          section.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
     }
+  };
+
+  const handleWhatsAppClick = (phone, companyName) => {
+    const cleanPhone = phone.replace(/[^0-9]/g, '');
+    const message = `Hola ${encodeURIComponent(companyName)}, te contacto desde SinergiaB2B. Estoy interesado en tus productos.`;
+    window.open(`https://wa.me/${cleanPhone}?text=${message}`, '_blank');
   };
 
   const getInitials = (name) => {
@@ -45,6 +51,10 @@ const ProvidersSection = ({ onSelectProvider }) => {
       .map((word) => word[0])
       .join('')
       .toUpperCase();
+  };
+
+  const getProfileImage = (provider) => {
+    return provider.profile_image || provider.foto_perfil || null;
   };
 
   if (loading && providers.length === 0) {
@@ -75,15 +85,16 @@ const ProvidersSection = ({ onSelectProvider }) => {
             const companyName = provider.empresa || provider.username || 'Empresa B2B';
             const phone = provider.telefono || '';
             const email = provider.email || '';
-            const address = provider.direccion || 'Nicaragua';
-            const hasProfilePic = provider.foto_perfil;
+            const address = provider.ubicacion || provider.direccion || 'Nicaragua';
+            const profileImage = getProfileImage(provider);
+            const providerId = provider.id;
 
             return (
               <div key={provider.id} className={styles.providerCard}>
                 <div className={styles.cardHeader}>
                   <div className={styles.avatarWrapper}>
-                    {hasProfilePic ? (
-                      <img src={provider.foto_perfil} alt={companyName} className={styles.avatarImg} />
+                    {profileImage ? (
+                      <img src={profileImage} alt={companyName} className={styles.avatarImg} />
                     ) : (
                       <div className={styles.avatarPlaceholder}>
                         {getInitials(companyName)}
@@ -100,7 +111,7 @@ const ProvidersSection = ({ onSelectProvider }) => {
                 <div className={styles.cardBody}>
                   <h3 className={styles.companyName}>{companyName}</h3>
                   <div className={styles.infoList}>
-                    {address && (
+                    {address && address !== 'Nicaragua' && (
                       <div className={styles.infoItem}>
                         <FaMapMarkerAlt className={styles.infoIcon} />
                         <span>{address.length > 50 ? `${address.substring(0, 50)}...` : address}</span>
@@ -123,21 +134,21 @@ const ProvidersSection = ({ onSelectProvider }) => {
 
                 <div className={styles.cardActions}>
                   <button 
-                    onClick={() => handleViewProducts(companyName)} 
+                    onClick={() => handleViewCatalog(providerId, companyName)} 
                     className={styles.viewProductsBtn}
                   >
-                    Ver Catálogo <FaChevronRight size={10} style={{ marginLeft: '4px' }} />
+                    <FaStore size={14} style={{ marginRight: '8px' }} />
+                    Ver Catálogo 
+                    <FaChevronRight size={10} style={{ marginLeft: '8px' }} />
                   </button>
                   
                   {phone && (
-                    <a 
-                      href={`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=Hola%20${encodeURIComponent(companyName)},%20te%20contacto%20desde%20SinergiaB2B.`}
-                      target="_blank" 
-                      rel="noopener noreferrer"
+                    <button 
+                      onClick={() => handleWhatsAppClick(phone, companyName)}
                       className={styles.whatsappBtn}
                     >
                       <FaWhatsapp /> Contactar
-                    </a>
+                    </button>
                   )}
                 </div>
               </div>

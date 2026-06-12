@@ -21,6 +21,8 @@ import About from './pages/About/About';
 import Contact from './pages/Contact/Contact';
 import VendedorProfile from './pages/Profile/Vendedor/VendedorProfile';
 import DashboardProveedor from './pages/Dashboard/Proveedor/DashboardProveedor';
+import CompradorProfile from './pages/Profile/Comprador/CompradorProfile'; 
+import ProviderCatalog from './pages/ProviderCatalog/ProviderCatalog';
 
 // Protected Route component
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
@@ -160,6 +162,11 @@ const AppContent = () => {
                         </PublicRoute>
                     } 
                 />
+
+                <Route 
+    path="/proveedor/:providerId/catalogo" 
+    element={<ProviderCatalog />} 
+/>
                 <Route 
                     path="/register" 
                     element={
@@ -180,6 +187,19 @@ const AppContent = () => {
                         </ProtectedRoute>
                     } 
                 />
+
+                <Route 
+                    path="/profile/comprador" 
+                    element={
+                        <ProtectedRoute allowedRoles={['comprador']}>
+                            <ProfileRouteWrapper>
+                                <CompradorProfile />
+                            </ProfileRouteWrapper>
+                        </ProtectedRoute>
+                    } 
+                />
+                
+
                 
                 {/* Protected Routes - Proveedor only */}
                 <Route 
