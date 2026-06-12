@@ -8,11 +8,19 @@ import styles from './Header.module.css';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const { user, isAuthenticated, logout } = useAuth();
+  const [profileImageError, setProfileImageError] = useState(false);
+  const { user, isAuthenticated, logout, loadUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   console.log('Header - Render:', { isAuthenticated, user });
+
+  // Reload user data when component mounts to ensure fresh profile data
+  useEffect(() => {
+    if (isAuthenticated && loadUser) {
+      loadUser();
+    }
+  }, [isAuthenticated, loadUser]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -37,6 +45,43 @@ const Header = () => {
       return location.pathname === href;
     }
     return location.pathname.startsWith(href);
+  };
+
+  // Get profile image URL with proper handling
+  const getProfileImageUrl = () => {
+    if (!user) return null;
+    
+    // Check for profile_image from API
+    if (user.profile_image) {
+      return user.profile_image;
+    }
+    // Check for foto_perfil (legacy field)
+    if (user.foto_perfil) {
+      return user.foto_perfil;
+    }
+    return null;
+  };
+
+  // Get user display name (prioritize empresa > full_name > username > email)
+  const getUserDisplayName = () => {
+    if (!user) return 'Usuario';
+    if (user.empresa) return user.empresa;
+    if (user.full_name) return user.full_name;
+    if (user.username) return user.username;
+    if (user.email) return user.email.split('@')[0];
+    return 'Usuario';
+  };
+
+  // Get user initials for avatar fallback
+  const getUserInitials = () => {
+    const name = getUserDisplayName();
+    if (name && name !== 'Usuario') {
+      return name.charAt(0).toUpperCase();
+    }
+    if (user?.email) {
+      return user.email.charAt(0).toUpperCase();
+    }
+    return 'U';
   };
 
   const getNavLinks = () => {
@@ -73,6 +118,10 @@ const Header = () => {
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, [isProfileMenuOpen]);
+
+  const profileImageUrl = getProfileImageUrl();
+  const displayName = getUserDisplayName();
+  const userInitials = getUserInitials();
 
   return (
     <header className={styles.header}>
@@ -125,16 +174,20 @@ const Header = () => {
                   onClick={toggleProfileMenu}
                 >
                   <div className={styles.profileAvatar}>
-                    {user?.profile_image ? (
-                      <img src={user.profile_image} alt="Profile" />
+                    {profileImageUrl && !profileImageError ? (
+                      <img 
+                        src={profileImageUrl} 
+                        alt="Profile"
+                        onError={() => setProfileImageError(true)}
+                      />
                     ) : (
                       <span className={styles.avatarInitial}>
-                        {(user?.empresa || user?.username || user?.email || 'U').charAt(0).toUpperCase()}
+                        {userInitials}
                       </span>
                     )}
                   </div>
                   <span className={styles.userName}>
-                    {user?.empresa || user?.username || user?.email}
+                    {displayName}
                   </span>
                   <span className={`${styles.dropdownArrow} ${isProfileMenuOpen ? styles.arrowUp : ''}`}>
                     ▼
@@ -145,16 +198,20 @@ const Header = () => {
                   <div className={styles.dropdownMenu}>
                     <div className={styles.dropdownHeader}>
                       <div className={styles.dropdownAvatar}>
-                        {user?.profile_image ? (
-                          <img src={user.profile_image} alt="Profile" />
+                        {profileImageUrl && !profileImageError ? (
+                          <img 
+                            src={profileImageUrl} 
+                            alt="Profile"
+                            onError={() => setProfileImageError(true)}
+                          />
                         ) : (
                           <span className={styles.dropdownAvatarInitial}>
-                            {(user?.empresa || user?.username || user?.email || 'U').charAt(0).toUpperCase()}
+                            {userInitials}
                           </span>
                         )}
                       </div>
                       <div className={styles.dropdownUserInfo}>
-                        <p className={styles.dropdownUserName}>{user?.empresa || user?.username}</p>
+                        <p className={styles.dropdownUserName}>{displayName}</p>
                         <p className={styles.dropdownUserEmail}>{user?.email}</p>
                       </div>
                     </div>
@@ -263,16 +320,20 @@ const Header = () => {
           <>
             <div className={styles.mobileProfileSection}>
               <div className={styles.mobileProfileAvatar}>
-                {user?.profile_image ? (
-                  <img src={user.profile_image} alt="Profile" />
+                {profileImageUrl && !profileImageError ? (
+                  <img 
+                    src={profileImageUrl} 
+                    alt="Profile"
+                    onError={() => setProfileImageError(true)}
+                  />
                 ) : (
                   <span className={styles.mobileAvatarInitial}>
-                    {(user?.empresa || user?.username || user?.email || 'U').charAt(0).toUpperCase()}
+                    {userInitials}
                   </span>
                 )}
               </div>
               <div className={styles.mobileProfileInfo}>
-                <p className={styles.mobileProfileName}>{user?.empresa || user?.username}</p>
+                <p className={styles.mobileProfileName}>{displayName}</p>
                 <p className={styles.mobileProfileEmail}>{user?.email}</p>
               </div>
             </div>

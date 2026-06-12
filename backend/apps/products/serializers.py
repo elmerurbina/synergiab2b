@@ -34,13 +34,19 @@ class ProductoListSerializer(serializers.ModelSerializer):
     imagenes_list = serializers.SerializerMethodField()
     promedio_valoracion = serializers.SerializerMethodField()
     total_valoraciones = serializers.SerializerMethodField()
+    proveedor_nombre = serializers.SerializerMethodField()
+    proveedor_empresa = serializers.SerializerMethodField()
     
     class Meta:
         model = Producto
-        fields = ('id', 'nombre', 'descripcion_corta', 'precio', 'precio_oferta', 
-                 'precio_actual', 'categoria_id', 'proveedor_id', 'imagen_principal', 
-                 'imagenes_list', 'visitas', 'ubicacion_id', 'estado', 'stock',
-                 'promedio_valoracion', 'total_valoraciones')
+        fields = (
+            'id', 'nombre', 'descripcion_corta', 'descripcion', 'precio', 'precio_oferta', 
+            'precio_actual', 'categoria', 'categoria_id', 'proveedor', 'proveedor_id',
+            'proveedor_nombre', 'proveedor_empresa',
+            'imagen_principal', 'imagenes_list', 'visitas', 'ubicacion', 'ubicacion_id',
+            'estado', 'stock', 'promedio_valoracion', 'total_valoraciones',
+            'fecha_creacion', 'fecha_actualizacion'
+        )
     
     def get_promedio_valoracion(self, obj):
         from django.db.models import Avg
@@ -52,8 +58,8 @@ class ProductoListSerializer(serializers.ModelSerializer):
     
     def get_precio_actual(self, obj):
         if obj.precio_oferta and obj.precio_oferta < obj.precio:
-            return obj.precio_oferta
-        return obj.precio
+            return float(obj.precio_oferta)
+        return float(obj.precio)
     
     def get_imagen_principal(self, obj):
         imagen = obj.imagenes.filter(es_principal=True).first()
@@ -82,13 +88,29 @@ class ProductoListSerializer(serializers.ModelSerializer):
                     'es_principal': img.es_principal
                 })
         return imagenes
+    
+    def get_proveedor_nombre(self, obj):
+        """Get provider's username or full name"""
+        if obj.proveedor:
+            return obj.proveedor.get_full_name() or obj.proveedor.username
+        return None
+    
+    def get_proveedor_empresa(self, obj):
+        """Get provider's company name (empresa)"""
+        if obj.proveedor and obj.proveedor.empresa:
+            return obj.proveedor.empresa
+        return None
 
 
 class ProductoDetailSerializer(serializers.ModelSerializer):
     imagenes = ImagenProductoSerializer(many=True, read_only=True)
     etiquetas = serializers.SerializerMethodField()
     categoria_info = CategoriaSerializer(source='categoria', read_only=True)
-    proveedor_info = UserSerializer(source='proveedor', read_only=True)
+    proveedor_nombre = serializers.SerializerMethodField()
+    proveedor_empresa = serializers.SerializerMethodField()
+    proveedor_telefono = serializers.SerializerMethodField()
+    proveedor_email = serializers.SerializerMethodField()
+    proveedor_ubicacion = serializers.SerializerMethodField()
     es_patrocinado = serializers.SerializerMethodField()
     precio_actual = serializers.SerializerMethodField()
     imagen_principal = serializers.SerializerMethodField()
@@ -97,12 +119,16 @@ class ProductoDetailSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Producto
-        fields = ('id', 'nombre', 'descripcion', 'descripcion_corta', 'precio', 
-                 'precio_oferta', 'precio_actual', 'stock', 'unidad_medida', 
-                 'categoria', 'categoria_info', 'proveedor', 'proveedor_info',
-                 'ubicacion', 'estado', 'visitas', 'imagenes', 'etiquetas', 
-                 'es_patrocinado', 'imagen_principal', 'fecha_creacion', 'fecha_actualizacion',
-                 'promedio_valoracion', 'total_valoraciones')
+        fields = (
+            'id', 'nombre', 'descripcion', 'descripcion_corta', 'precio', 
+            'precio_oferta', 'precio_actual', 'stock', 'unidad_medida', 
+            'categoria', 'categoria_info', 'proveedor', 'proveedor_id',
+            'proveedor_nombre', 'proveedor_empresa', 'proveedor_telefono', 
+            'proveedor_email', 'proveedor_ubicacion',
+            'ubicacion', 'estado', 'visitas', 'imagenes', 'etiquetas', 
+            'es_patrocinado', 'imagen_principal', 'fecha_creacion', 'fecha_actualizacion',
+            'promedio_valoracion', 'total_valoraciones'
+        )
     
     def get_promedio_valoracion(self, obj):
         from django.db.models import Avg
@@ -114,8 +140,8 @@ class ProductoDetailSerializer(serializers.ModelSerializer):
     
     def get_precio_actual(self, obj):
         if obj.precio_oferta and obj.precio_oferta < obj.precio:
-            return obj.precio_oferta
-        return obj.precio
+            return float(obj.precio_oferta)
+        return float(obj.precio)
     
     def get_imagen_principal(self, obj):
         imagen = obj.imagenes.filter(es_principal=True).first()
@@ -137,6 +163,31 @@ class ProductoDetailSerializer(serializers.ModelSerializer):
         from django.utils import timezone
         hoy = timezone.now().date()
         return obj.patrocinios.filter(activo=True, fecha_inicio__lte=hoy, fecha_fin__gte=hoy).exists()
+    
+    def get_proveedor_nombre(self, obj):
+        if obj.proveedor:
+            return obj.proveedor.get_full_name() or obj.proveedor.username
+        return None
+    
+    def get_proveedor_empresa(self, obj):
+        if obj.proveedor and obj.proveedor.empresa:
+            return obj.proveedor.empresa
+        return None
+    
+    def get_proveedor_telefono(self, obj):
+        if obj.proveedor:
+            return obj.proveedor.telefono
+        return None
+    
+    def get_proveedor_email(self, obj):
+        if obj.proveedor:
+            return obj.proveedor.email
+        return None
+    
+    def get_proveedor_ubicacion(self, obj):
+        if obj.proveedor:
+            return obj.proveedor.ubicacion
+        return None
 
 
 class ProductoCreateUpdateSerializer(serializers.ModelSerializer):
@@ -145,8 +196,10 @@ class ProductoCreateUpdateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Producto
-        fields = ('nombre', 'descripcion', 'descripcion_corta', 'precio', 'precio_oferta',
-                 'stock', 'unidad_medida', 'categoria', 'ubicacion', 'etiquetas', 'imagenes')
+        fields = (
+            'nombre', 'descripcion', 'descripcion_corta', 'precio', 'precio_oferta',
+            'stock', 'unidad_medida', 'categoria', 'ubicacion', 'etiquetas', 'imagenes'
+        )
     
     def validate_descripcion_corta(self, value):
         if not value or not value.strip():
@@ -206,8 +259,6 @@ class ProductoCreateUpdateSerializer(serializers.ModelSerializer):
                 ProductoEtiqueta.objects.create(producto=instance, etiqueta=etiqueta)
         
         if imagenes is not None:
-            # Optional: Delete existing images if you want to replace them
-            # instance.imagenes.all().delete()
             for index, imagen in enumerate(imagenes):
                 ImagenProducto.objects.create(
                     producto=instance,

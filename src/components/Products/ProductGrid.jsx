@@ -55,6 +55,7 @@ const ProductGrid = ({ initialSearch = '' }) => {
       if (maxPrice) params.precio_max = maxPrice;
       
       const res = await productAPI.getProducts(params);
+      console.log('Products response:', res.data);
       setProducts(res.data.results || res.data || []);
     } catch (err) {
       console.error('Error fetching products:', err);
@@ -111,7 +112,7 @@ const ProductGrid = ({ initialSearch = '' }) => {
 
   const renderStars = (rating) => {
     const stars = [];
-    const floorRating = Math.floor(rating);
+    const floorRating = Math.floor(rating || 0);
     for (let i = 1; i <= 5; i++) {
       if (i <= floorRating) {
         stars.push(<span key={i} className={styles.starFilled}>★</span>);
@@ -122,12 +123,26 @@ const ProductGrid = ({ initialSearch = '' }) => {
     return stars;
   };
 
-  // Get provider display name
-  const getProviderName = (product) => {
-    if (product.proveedor_info) {
-      return product.proveedor_info.empresa || product.proveedor_info.username;
+  // Get provider display name - Prioritizes empresa name
+  const getProviderDisplayName = (product) => {
+    // Check if proveedor_empresa exists and is not empty
+    if (product.proveedor_empresa && product.proveedor_empresa.trim() !== '') {
+      return product.proveedor_empresa;
     }
+    // Fallback to proveedor_nombre (username)
+    if (product.proveedor_nombre && product.proveedor_nombre.trim() !== '') {
+      return product.proveedor_nombre;
+    }
+    // Last fallback
     return 'Proveedor';
+  };
+
+  // Get provider icon based on company name
+  const getProviderIcon = (product) => {
+    if (product.proveedor_empresa) {
+      return '🏢';
+    }
+    return '🏪';
   };
 
   return (
@@ -217,6 +232,9 @@ const ProductGrid = ({ initialSearch = '' }) => {
           <div className={styles.grid}>
             {products.map((product) => {
               const isFav = favorites.has(product.id);
+              const providerName = getProviderDisplayName(product);
+              const providerIcon = getProviderIcon(product);
+              
               return (
                 <div
                   key={product.id}
@@ -245,16 +263,20 @@ const ProductGrid = ({ initialSearch = '' }) => {
                   </div>
 
                   <div className={styles.productInfo}>
-                    {/* Provider Name - New Section */}
+                    {/* Provider Section - Shows empresa name */}
                     <div className={styles.providerSection}>
-                      <span className={styles.providerIcon}>🏪</span>
-                      <span className={styles.providerName}>
-                        {getProviderName(product)}
+                      <span className={styles.providerIcon}>{providerIcon}</span>
+                      <span className={styles.providerName} title={providerName}>
+                        {providerName}
                       </span>
                     </div>
 
                     <h4 className={styles.productName}>{product.nombre}</h4>
-                    <p className={styles.productDesc}>{product.descripcion_corta}</p>
+                    <p className={styles.productDesc}>
+                      {product.descripcion_corta && product.descripcion_corta.length > 80 
+                        ? `${product.descripcion_corta.substring(0, 80)}...` 
+                        : product.descripcion_corta}
+                    </p>
                     
                     <div className={styles.ratingContainer}>
                       <div className={styles.stars}>
@@ -266,13 +288,13 @@ const ProductGrid = ({ initialSearch = '' }) => {
                     </div>
 
                     <div className={styles.priceContainer}>
-                      {product.precio_oferta && product.precio_oferta < product.precio ? (
+                      {product.precio_oferta && parseFloat(product.precio_oferta) < parseFloat(product.precio) ? (
                         <>
-                          <span className={styles.oldPrice}>C$ {product.precio}</span>
-                          <span className={styles.currentPrice}>C$ {product.precio_oferta}</span>
+                          <span className={styles.oldPrice}>C$ {parseFloat(product.precio).toFixed(2)}</span>
+                          <span className={styles.currentPrice}>C$ {parseFloat(product.precio_oferta).toFixed(2)}</span>
                         </>
                       ) : (
-                        <span className={styles.currentPrice}>C$ {product.precio}</span>
+                        <span className={styles.currentPrice}>C$ {parseFloat(product.precio).toFixed(2)}</span>
                       )}
                     </div>
                   </div>
