@@ -1,8 +1,4 @@
-// src/services/api.js
 import axiosInstance from './axios';
-
-// DEFAULT EXPORT - Add this line at the top
-export default axiosInstance;
 
 // Productos API
 export const productAPI = {
@@ -10,9 +6,13 @@ export const productAPI = {
         return axiosInstance.get('/productos/', { params });
     },
 
-   uploadImage: (formData) => {
-    return axiosInstance.post('/productos/imagenes/', formData);
-},
+    uploadImage: (formData) => {
+        if (!(formData instanceof FormData)) {
+            console.error('uploadImage expects FormData');
+            return Promise.reject(new Error('uploadImage expects FormData'));
+        }
+        return axiosInstance.post('/productos/imagenes/', formData);
+    },
     
     deleteImage: (imageId) => {
         return axiosInstance.delete(`/productos/imagenes/${imageId}/`);
@@ -27,19 +27,32 @@ export const productAPI = {
     },
     
     createProduct: (data) => {
+        // If data is FormData, pass it directly for file upload
+        if (data instanceof FormData) {
+            console.log('📤 Creating product with FormData (including images)');
+            return axiosInstance.post('/productos/crear/', data);
+        }
+        // Otherwise, send as JSON
+        console.log('📤 Creating product with JSON data');
         return axiosInstance.post('/productos/crear/', data);
     },
     
     updateProduct: (id, data) => {
+        if (data instanceof FormData) {
+            console.log(`📤 Updating product ${id} with FormData (including images)`);
+            return axiosInstance.put(`/productos/${id}/editar/`, data);
+        }
+        console.log(`📤 Updating product ${id} with JSON data`);
         return axiosInstance.put(`/productos/${id}/editar/`, data);
     },
     
     deleteProduct: (id) => {
+        console.log(`🗑️ Deleting product ${id}`);
         return axiosInstance.delete(`/productos/${id}/eliminar/`);
     },
     
-    getMyProducts: () => {
-        return axiosInstance.get('/productos/mis-productos/');
+    getMyProducts: (params = {}) => {
+        return axiosInstance.get('/productos/mis-productos/', { params });
     },
     
     getSponsoredProducts: () => {
@@ -163,6 +176,7 @@ export const ratingAPI = {
     getRatings: (productoId, params = {}) => {
         return axiosInstance.get('/interacciones/valoraciones/', { params: { producto_id: productoId, ...params } });
     },
+    
     createRating: (productoId, puntuacion, comentario = '') => {
         return axiosInstance.post('/interacciones/valoraciones/crear/', {
             producto_id: productoId,
@@ -170,11 +184,17 @@ export const ratingAPI = {
             comentario: comentario
         });
     },
+    
     deleteRating: (productoId) => {
         return axiosInstance.delete(`/interacciones/valoraciones/eliminar/${productoId}/`);
     },
+    
     getUserProductRating: (productoId) => {
         return axiosInstance.get(`/interacciones/valoraciones/producto/${productoId}/`);
+    },
+    
+    getProductRatings: (productoId, params = {}) => {
+        return axiosInstance.get(`/interacciones/valoraciones/producto/${productoId}/`, { params });
     }
 };
 
@@ -183,7 +203,60 @@ export const providerAPI = {
     getProviders: (params = {}) => {
         return axiosInstance.get('/auth/proveedores/', { params });
     },
+    
     getProvider: (id) => {
         return axiosInstance.get(`/auth/proveedores/${id}/`);
+    },
+    
+    getProviderProducts: (id, params = {}) => {
+        return axiosInstance.get(`/auth/proveedores/${id}/productos/`, { params });
+    },
+    
+    getProviderStats: (id) => {
+        return axiosInstance.get(`/auth/proveedores/${id}/estadisticas/`);
     }
 };
+
+// Authentication API
+export const authAPI = {
+    login: (credentials) => {
+        return axiosInstance.post('/auth/login/', credentials);
+    },
+    
+    register: (userData) => {
+        return axiosInstance.post('/auth/registro/', userData);
+    },
+    
+    logout: () => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('user');
+        return Promise.resolve();
+    },
+    
+    getProfile: () => {
+        return axiosInstance.get('/auth/perfil/');
+    },
+    
+    updateProfile: (data) => {
+        return axiosInstance.put('/auth/perfil/actualizar/', data);
+    },
+    
+    changePassword: (data) => {
+        return axiosInstance.post('/auth/cambiar-password/', data);
+    }
+};
+
+// Default export - only ONE default export
+const api = {
+    product: productAPI,
+    category: categoryAPI,
+    location: locationAPI,
+    favorite: favoriteAPI,
+    interaction: interactionAPI,
+    rating: ratingAPI,
+    provider: providerAPI,
+    auth: authAPI
+};
+
+export default api;

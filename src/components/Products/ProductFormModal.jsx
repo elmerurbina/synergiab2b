@@ -164,8 +164,7 @@ const ProductFormModal = ({ isOpen, onClose, product, onSuccess, categories: ini
         const files = Array.from(e.target.files);
         if (files.length === 0) return;
         
-        setUploadingImage(true);
-        
+        // Add new images to state for preview
         const newImageObjects = files.map(file => ({
             file: file,
             preview: URL.createObjectURL(file),
@@ -173,25 +172,8 @@ const ProductFormModal = ({ isOpen, onClose, product, onSuccess, categories: ini
         }));
         
         setNewImages(prev => [...prev, ...newImageObjects]);
+        toast.success(`${files.length} imagen(es) seleccionada(s) para subir`);
         
-        if (product?.id) {
-            for (const imageObj of newImageObjects) {
-                const formDataImg = new FormData();
-                formDataImg.append('url', imageObj.file);
-                formDataImg.append('producto', product.id);
-                
-                try {
-                    await productAPI.uploadImage(formDataImg);
-                    toast.success('Imagen subida exitosamente');
-                    await loadProductImages(product.id);
-                } catch (error) {
-                    toast.error('Error al subir la imagen');
-                }
-            }
-            setNewImages([]);
-        }
-        
-        setUploadingImage(false);
         e.target.value = '';
     };
 
@@ -201,6 +183,7 @@ const ProductFormModal = ({ isOpen, onClose, product, onSuccess, categories: ini
             URL.revokeObjectURL(imageToDelete.preview);
         }
         setNewImages(prev => prev.filter((_, i) => i !== index));
+        toast.info('Imagen eliminada de la lista');
     };
 
     const handleDeleteImage = async (imageId) => {
@@ -254,20 +237,7 @@ const ProductFormModal = ({ isOpen, onClose, product, onSuccess, categories: ini
         }
     };
 
-    const uploadNewImages = async (productId) => {
-        for (const imageObj of newImages) {
-            const formDataImg = new FormData();
-            formDataImg.append('url', imageObj.file);
-            formDataImg.append('producto', productId);
-            
-            try {
-                await productAPI.uploadImage(formDataImg);
-            } catch (error) {
-                console.error('Error uploading image:', error);
-            }
-        }
-    };
-
+    // FIXED: This function now uses FormData instead of JSON
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -278,47 +248,126 @@ const ProductFormModal = ({ isOpen, onClose, product, onSuccess, categories: ini
         
         setLoading(true);
         
-        const productData = {
-            nombre: formData.nombre,
-            descripcion: formData.descripcion,
-            descripcion_corta: formData.descripcion_corta,
-            precio: parseFloat(formData.precio),
-            stock: parseInt(formData.stock) || 0,
-            unidad_medida: formData.unidad_medida,
-            categoria: parseInt(formData.categoria),
-            etiquetas: formData.etiquetas ? formData.etiquetas.split(',').map(tag => tag.trim()) : []
-        };
-        
-        if (formData.precio_oferta) {
-            productData.precio_oferta = parseFloat(formData.precio_oferta);
-        }
-        
-        if (formData.ubicacion) {
-            productData.ubicacion = parseInt(formData.ubicacion);
-        }
-        
         try {
             let response;
+            
             if (product?.id) {
-                response = await productAPI.updateProduct(product.id, productData);
-                toast.success('¡Producto actualizado exitosamente!');
-            } else {
-                response = await productAPI.createProduct(productData);
-                toast.success('¡Producto creado exitosamente!');
-                
-                if (newImages.length > 0 && response.data?.id) {
-                    await uploadNewImages(response.data.id);
+                // UPDATE EXISTING PRODUCT
+                if (newImages.length > 0) {
+                    // If there are new images, use FormData for update
+                    const formDataToSend = new FormData();
+                    formDataToSend.append('nombre', formData.nombre);
+                    formDataToSend.append('descripcion', formData.descripcion);
+                    formDataToSend.append('descripcion_corta', formData.descripcion_corta);
+                    formDataToSend.append('precio', formData.precio);
+                    formDataToSend.append('stock', formData.stock || '0');
+                    formDataToSend.append('unidad_medida', formData.unidad_medida);
+                    formDataToSend.append('categoria', formData.categoria);
+                    
+                    if (formData.precio_oferta) {
+                        formDataToSend.append('precio_oferta', formData.precio_oferta);
+                    }
+                    
+                    if (formData.ubicacion) {
+                        formDataToSend.append('ubicacion', formData.ubicacion);
+                    }
+                    
+                    if (formData.etiquetas) {
+                        const etiquetasArray = formData.etiquetas.split(',').map(tag => tag.trim());
+                        etiquetasArray.forEach(tag => {
+                            if (tag) formDataToSend.append('etiquetas', tag);
+                        });
+                    }
+                    
+                    // Append new images
+                    newImages.forEach((image, index) => {
+                        formDataToSend.append('imagenes', image.file);
+                    });
+                    
+                    response = await productAPI.updateProduct(product.id, formDataToSend);
+                    toast.success('¡Producto actualizado exitosamente!');
+                } else {
+                    // No new images, use JSON
+                    const productData = {
+                        nombre: formData.nombre,
+                        descripcion: formData.descripcion,
+                        descripcion_corta: formData.descripcion_corta,
+                        precio: parseFloat(formData.precio),
+                        stock: parseInt(formData.stock) || 0,
+                        unidad_medida: formData.unidad_medida,
+                        categoria: parseInt(formData.categoria),
+                        etiquetas: formData.etiquetas ? formData.etiquetas.split(',').map(tag => tag.trim()) : []
+                    };
+                    
+                    if (formData.precio_oferta) {
+                        productData.precio_oferta = parseFloat(formData.precio_oferta);
+                    }
+                    
+                    if (formData.ubicacion) {
+                        productData.ubicacion = parseInt(formData.ubicacion);
+                    }
+                    
+                    response = await productAPI.updateProduct(product.id, productData);
+                    toast.success('¡Producto actualizado exitosamente!');
                 }
+            } else {
+                // CREATE NEW PRODUCT - ALWAYS use FormData when there are images
+                const formDataToSend = new FormData();
+                
+                // Add all text fields
+                formDataToSend.append('nombre', formData.nombre);
+                formDataToSend.append('descripcion', formData.descripcion);
+                formDataToSend.append('descripcion_corta', formData.descripcion_corta);
+                formDataToSend.append('precio', formData.precio);
+                formDataToSend.append('stock', formData.stock || '0');
+                formDataToSend.append('unidad_medida', formData.unidad_medida);
+                formDataToSend.append('categoria', formData.categoria);
+                
+                if (formData.precio_oferta) {
+                    formDataToSend.append('precio_oferta', formData.precio_oferta);
+                }
+                
+                if (formData.ubicacion) {
+                    formDataToSend.append('ubicacion', formData.ubicacion);
+                }
+                
+                // Add etiquetas as array
+                if (formData.etiquetas) {
+                    const etiquetasArray = formData.etiquetas.split(',').map(tag => tag.trim());
+                    etiquetasArray.forEach(tag => {
+                        if (tag) formDataToSend.append('etiquetas', tag);
+                    });
+                }
+                
+                // Add images - CRITICAL: Images must be in FormData
+                if (newImages.length === 0) {
+                    toast.error('Debes seleccionar al menos una imagen para el producto');
+                    setLoading(false);
+                    return;
+                }
+                
+                newImages.forEach((image, index) => {
+                    formDataToSend.append('imagenes', image.file);
+                });
+                
+                console.log('📤 Sending FormData with fields:', [...formDataToSend.keys()]);
+                console.log('📸 Number of images:', newImages.length);
+                
+                response = await productAPI.createProduct(formDataToSend);
+                toast.success('¡Producto creado exitosamente!');
             }
             
             if (onSuccess) onSuccess();
             onClose();
+            
         } catch (error) {
             console.error('Error saving product:', error);
-            if (error.response?.data) {
-                setFormErrors(error.response.data);
+            if (error.response?.status === 415) {
+                toast.error('Error: Tipo de contenido no soportado. Por favor intenta de nuevo.');
+            } else if (error.response?.data) {
                 const errorMessage = Object.values(error.response.data).flat().join(', ');
-                toast.error(errorMessage);
+                toast.error(errorMessage || 'Error al guardar el producto');
+                setFormErrors(error.response.data);
             } else {
                 toast.error('Error al guardar el producto');
             }
@@ -358,7 +407,7 @@ const ProductFormModal = ({ isOpen, onClose, product, onSuccess, categories: ini
                                 {formErrors.nombre && <span className={styles.errorText}>{formErrors.nombre}</span>}
                             </div>
                             
-                            {/* Descripción Corta - Now Required */}
+                            {/* Descripción Corta */}
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>
                                     Descripción Corta <span className={styles.required}>*</span>
@@ -506,7 +555,9 @@ const ProductFormModal = ({ isOpen, onClose, product, onSuccess, categories: ini
                             
                             {/* Imágenes */}
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>Imágenes del Producto</label>
+                                <label className={styles.label}>
+                                    Imágenes del Producto {!product && <span className={styles.required}>*</span>}
+                                </label>
                                 <div className={styles.imageUploadArea}>
                                     <label className={styles.uploadButton}>
                                         <FaUpload /> {uploadingImage ? 'Subiendo...' : 'Subir Imágenes'}
@@ -519,7 +570,10 @@ const ProductFormModal = ({ isOpen, onClose, product, onSuccess, categories: ini
                                             style={{ display: 'none' }}
                                         />
                                     </label>
-                                    <p className={styles.uploadHint}>Formatos: JPG, PNG, GIF. Máx 5MB por imagen</p>
+                                    <p className={styles.uploadHint}>
+                                        Formatos: JPG, PNG, GIF. Máx 5MB por imagen
+                                        {!product && <span className={styles.required}> * Obligatorio al menos una imagen</span>}
+                                    </p>
                                 </div>
                                 
                                 {existingImages.length > 0 && (
@@ -556,7 +610,7 @@ const ProductFormModal = ({ isOpen, onClose, product, onSuccess, categories: ini
                                 
                                 {newImages.length > 0 && (
                                     <div className={styles.imageGallery}>
-                                        <h4>Imágenes Nuevas</h4>
+                                        <h4>Imágenes Nuevas ({newImages.length})</h4>
                                         <div className={styles.imageGrid}>
                                             {newImages.map((img, idx) => (
                                                 <div key={idx} className={styles.imageItem}>

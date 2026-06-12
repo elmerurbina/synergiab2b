@@ -56,10 +56,7 @@ class ProductoListSerializer(serializers.ModelSerializer):
         return obj.precio
     
     def get_imagen_principal(self, obj):
-        # Try to get image marked as principal first
         imagen = obj.imagenes.filter(es_principal=True).first()
-        
-        # If no principal image, get the first image
         if not imagen:
             imagen = obj.imagenes.first()
         
@@ -144,11 +141,12 @@ class ProductoDetailSerializer(serializers.ModelSerializer):
 
 class ProductoCreateUpdateSerializer(serializers.ModelSerializer):
     etiquetas = serializers.ListField(child=serializers.CharField(), write_only=True, required=False)
+    imagenes = serializers.ListField(child=serializers.ImageField(), write_only=True, required=False)
     
     class Meta:
         model = Producto
         fields = ('nombre', 'descripcion', 'descripcion_corta', 'precio', 'precio_oferta',
-                 'stock', 'unidad_medida', 'categoria', 'ubicacion', 'etiquetas')
+                 'stock', 'unidad_medida', 'categoria', 'ubicacion', 'etiquetas', 'imagenes')
     
     def validate_descripcion_corta(self, value):
         if not value or not value.strip():
@@ -166,18 +164,36 @@ class ProductoCreateUpdateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("La descripción debe tener al menos 20 caracteres")
         return value
     
+    def validate_imagenes(self, value):
+        if value and len(value) > 10:
+            raise serializers.ValidationError("Máximo 10 imágenes por producto")
+        return value
+    
     def create(self, validated_data):
         etiquetas = validated_data.pop('etiquetas', [])
+        imagenes = validated_data.pop('imagenes', [])
+        
         producto = Producto.objects.create(**validated_data)
         
+        # Create etiquetas
         for etiqueta_nombre in etiquetas:
             etiqueta, _ = Etiqueta.objects.get_or_create(nombre=etiqueta_nombre.lower())
             ProductoEtiqueta.objects.create(producto=producto, etiqueta=etiqueta)
+        
+        # Create images
+        for index, imagen in enumerate(imagenes):
+            ImagenProducto.objects.create(
+                producto=producto,
+                url=imagen,
+                es_principal=(index == 0),
+                orden=index
+            )
         
         return producto
     
     def update(self, instance, validated_data):
         etiquetas = validated_data.pop('etiquetas', None)
+        imagenes = validated_data.pop('imagenes', None)
         
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -188,6 +204,17 @@ class ProductoCreateUpdateSerializer(serializers.ModelSerializer):
             for etiqueta_nombre in etiquetas:
                 etiqueta, _ = Etiqueta.objects.get_or_create(nombre=etiqueta_nombre.lower())
                 ProductoEtiqueta.objects.create(producto=instance, etiqueta=etiqueta)
+        
+        if imagenes is not None:
+            # Optional: Delete existing images if you want to replace them
+            # instance.imagenes.all().delete()
+            for index, imagen in enumerate(imagenes):
+                ImagenProducto.objects.create(
+                    producto=instance,
+                    url=imagen,
+                    es_principal=(index == 0 and not instance.imagenes.exists()),
+                    orden=index
+                )
         
         return instance
 

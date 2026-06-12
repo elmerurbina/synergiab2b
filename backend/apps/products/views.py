@@ -2,7 +2,7 @@ from rest_framework import generics, filters, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.views import APIView
-from django.db.models import Q, Count
+from django.db.models import Q, Count, F
 from django.utils import timezone
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -147,17 +147,27 @@ class ProductoDetailView(generics.RetrieveAPIView):
 
 class ProductoCreateView(generics.CreateAPIView):
     """
-    Crear un nuevo producto (Solo para proveedores autenticados)
+    Crear un nuevo producto con imágenes (Solo para proveedores autenticados)
     """
     permission_classes = [IsAuthenticated]
     serializer_class = ProductoCreateUpdateSerializer
+    parser_classes = (MultiPartParser, FormParser)  # Important for file uploads
     
     def perform_create(self, serializer):
         # Verificar que el usuario sea proveedor
         if self.request.user.rol != 'proveedor':
             from rest_framework.exceptions import PermissionDenied
             raise PermissionDenied("Solo los proveedores pueden crear productos")
+        
+        # Save product with images
         serializer.save(proveedor=self.request.user)
+    
+    def create(self, request, *args, **kwargs):
+        # Log received data for debugging
+        print("📸 Files received:", request.FILES.keys())
+        print("📝 Data received:", request.data.keys())
+        
+        return super().create(request, *args, **kwargs)
 
 
 class ProductoUpdateView(generics.UpdateAPIView):
@@ -166,6 +176,7 @@ class ProductoUpdateView(generics.UpdateAPIView):
     """
     permission_classes = [IsAuthenticated]
     serializer_class = ProductoCreateUpdateSerializer
+    parser_classes = (MultiPartParser, FormParser)  # Allow file uploads
     
     def get_queryset(self):
         return Producto.objects.filter(proveedor=self.request.user)
@@ -185,7 +196,6 @@ class ProductoDeleteView(generics.DestroyAPIView):
             instance = self.get_object()
             print(f"🗑️ Deleting product: {instance.id} - {instance.nombre}")
             
-
             instance.delete()
             
             return Response({
@@ -229,6 +239,9 @@ class ImagenProductoView(APIView):
     parser_classes = (MultiPartParser, FormParser) 
     
     def post(self, request):
+        print("📸 ImagenProductoView - Files:", request.FILES)
+        print("📝 ImagenProductoView - Data:", request.data)
+        
         serializer = ImagenProductoSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             producto = serializer.validated_data['producto']
@@ -237,6 +250,7 @@ class ImagenProductoView(APIView):
                               status=status.HTTP_403_FORBIDDEN)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print("❌ Serializer errors:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, pk):

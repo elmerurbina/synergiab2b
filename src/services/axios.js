@@ -4,10 +4,9 @@ const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8000/api',
     timeout: 15000,
     headers: {
-        Accept: 'application/json', 
+        Accept: 'application/json',
     }
 });
-
 
 axiosInstance.interceptors.request.use(
     (config) => {
@@ -18,8 +17,21 @@ axiosInstance.interceptors.request.use(
             config.headers.Authorization = `Bearer ${token}`;
         }
 
-        if (!(config.data instanceof FormData)) {
+        // Handle Content-Type for FormData
+        if (config.data instanceof FormData) {
+            // Let the browser set the Content-Type header with the correct boundary
+            delete config.headers['Content-Type'];
+            console.log('📸 FormData detected, removed Content-Type header');
+            
+            // Debug: Log FormData contents
+            if (process.env.NODE_ENV === 'development') {
+                for (let pair of config.data.entries()) {
+                    console.log(`FormData: ${pair[0]} =`, pair[1] instanceof File ? `File: ${pair[1].name} (${pair[1].size} bytes)` : pair[1]);
+                }
+            }
+        } else if (config.data && typeof config.data === 'object') {
             config.headers['Content-Type'] = 'application/json';
+            console.log('📝 JSON request:', config.data);
         }
 
         return config;
@@ -28,7 +40,6 @@ axiosInstance.interceptors.request.use(
         return Promise.reject(error);
     }
 );
-
 
 let isRefreshing = false;
 let failedQueue = [];
@@ -51,6 +62,7 @@ axiosInstance.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
+        // Handle 401 Unauthorized - Token refresh
         if (
             error.response?.status === 401 &&
             !originalRequest.url.includes('/auth/refresh/') &&
@@ -98,12 +110,29 @@ axiosInstance.interceptors.response.use(
                 localStorage.removeItem('refresh_token');
                 localStorage.removeItem('user');
 
-                window.location.href = '/login';
+                // Redirect to login only if not already there
+                if (!window.location.pathname.includes('/login')) {
+                    window.location.href = '/login';
+                }
 
                 return Promise.reject(refreshError);
             } finally {
                 isRefreshing = false;
             }
+        }
+
+        // Handle 415 Unsupported Media Type - Debug
+        if (error.response?.status === 415) {
+            console.error('❌ 415 Error - Unsupported Media Type');
+            console.error('Request Content-Type:', originalRequest.headers['Content-Type']);
+            console.error('Request data type:', originalRequest.data instanceof FormData ? 'FormData' : typeof originalRequest.data);
+            console.error('Full request config:', originalRequest);
+        }
+
+        // Handle 400 Bad Request - Validation errors
+        if (error.response?.status === 400) {
+            console.error('❌ 400 Error - Validation Failed');
+            console.error('Error details:', error.response.data);
         }
 
         return Promise.reject(error);
