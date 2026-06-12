@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -9,18 +9,41 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [profileImageError, setProfileImageError] = useState(false);
-  const { user, isAuthenticated, logout, loadUser } = useAuth();
+  const [imageKey, setImageKey] = useState(Date.now());
+  const { user, isAuthenticated, logout, refreshUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log('Header - Render:', { isAuthenticated, user });
+  console.log('Header - User data:', user);
+  console.log('Header - Profile image:', user?.profile_image);
 
-  // Reload user data when component mounts to ensure fresh profile data
+  // Refresh user data when component mounts and when authenticated
   useEffect(() => {
-    if (isAuthenticated && loadUser) {
-      loadUser();
-    }
-  }, [isAuthenticated, loadUser]);
+    const loadUserData = async () => {
+      if (isAuthenticated) {
+        console.log('Header - Refreshing user data...');
+        await refreshUser();
+        setImageKey(Date.now()); // Force image refresh
+      }
+    };
+    
+    loadUserData();
+  }, [isAuthenticated, refreshUser]);
+
+  // Listen for storage changes (when login happens in another tab)
+  useEffect(() => {
+    const handleStorageChange = async (e) => {
+      if (e.key === 'access_token' && e.newValue) {
+        console.log('Storage change detected, refreshing user...');
+        await refreshUser();
+        setImageKey(Date.now());
+        setProfileImageError(false);
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [refreshUser]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -39,7 +62,6 @@ const Header = () => {
     setIsProfileMenuOpen(false);
   };
 
-  // Helper function to check if a link is active
   const isActiveLink = (href) => {
     if (href === '/') {
       return location.pathname === href;
@@ -47,22 +69,25 @@ const Header = () => {
     return location.pathname.startsWith(href);
   };
 
-  // Get profile image URL with proper handling
-  const getProfileImageUrl = () => {
+  // Get profile image URL with cache buster
+  const getProfileImageUrl = useCallback(() => {
     if (!user) return null;
     
-    // Check for profile_image from API
+    let imageUrl = null;
     if (user.profile_image) {
-      return user.profile_image;
+      imageUrl = user.profile_image;
+    } else if (user.foto_perfil) {
+      imageUrl = user.foto_perfil;
     }
-    // Check for foto_perfil (legacy field)
-    if (user.foto_perfil) {
-      return user.foto_perfil;
+    
+    if (imageUrl) {
+      // Add cache buster to force image refresh
+      const separator = imageUrl.includes('?') ? '&' : '?';
+      return `${imageUrl}${separator}t=${imageKey}`;
     }
     return null;
-  };
+  }, [user, imageKey]);
 
-  // Get user display name (prioritize empresa > full_name > username > email)
   const getUserDisplayName = () => {
     if (!user) return 'Usuario';
     if (user.empresa) return user.empresa;
@@ -72,7 +97,6 @@ const Header = () => {
     return 'Usuario';
   };
 
-  // Get user initials for avatar fallback
   const getUserInitials = () => {
     const name = getUserDisplayName();
     if (name && name !== 'Usuario') {
@@ -123,6 +147,11 @@ const Header = () => {
   const displayName = getUserDisplayName();
   const userInitials = getUserInitials();
 
+  // Reset error state when image URL changes
+  useEffect(() => {
+    setProfileImageError(false);
+  }, [profileImageUrl]);
+
   return (
     <header className={styles.header}>
       <div className={styles.headerContent}>
@@ -167,7 +196,6 @@ const Header = () => {
             </>
           ) : (
             <div className={styles.userActions}>
-              {/* Profile Dropdown Menu */}
               <div className={styles.profileMenuContainer}>
                 <button 
                   className={styles.profileButton}
@@ -218,7 +246,6 @@ const Header = () => {
                     
                     <div className={styles.dropdownDivider}></div>
                     
-                    {/* Profile Link for all authenticated users */}
                     <Link 
                       to={
                         user?.rol === 'proveedor' ? '/profile/vendedor' :
@@ -231,7 +258,6 @@ const Header = () => {
                       Mi Perfil
                     </Link>
                     
-                    {/* Dashboard Links based on role */}
                     {user?.rol === 'proveedor' && (
                       <Link 
                         to="/dashboard/proveedor"
@@ -254,7 +280,6 @@ const Header = () => {
                       </Link>
                     )}
                     
-                    {/* Manage Catalog for proveedores */}
                     {user?.rol === 'proveedor' && (
                       <Link 
                         to="/manage-catalog"
@@ -266,7 +291,6 @@ const Header = () => {
                       </Link>
                     )}
                     
-                    {/* My Products for compradores */}
                     {user?.rol === 'comprador' && (
                       <Link 
                         to="/my-favorites"
@@ -315,7 +339,6 @@ const Header = () => {
         
         <div className={styles.mobileDivider}></div>
         
-        {/* Profile Section in Mobile Menu */}
         {isAuthenticated && (
           <>
             <div className={styles.mobileProfileSection}>
@@ -340,7 +363,6 @@ const Header = () => {
             
             <div className={styles.mobileDivider}></div>
             
-            {/* Mobile Profile Link */}
             <Link 
               to={
                 user?.rol === 'proveedor' ? '/profile/vendedor' :

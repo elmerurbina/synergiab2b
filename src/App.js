@@ -20,7 +20,7 @@ import ProvidersSection from './components/Providers/ProvidersSection';
 import About from './pages/About/About';
 import Contact from './pages/Contact/Contact';
 import VendedorProfile from './pages/Profile/Vendedor/VendedorProfile';
-import './styles/global.css';
+import DashboardProveedor from './pages/Dashboard/Proveedor/DashboardProveedor';
 
 // Protected Route component
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
@@ -96,16 +96,7 @@ const HomePage = () => {
     );
 };
 
-// Dashboard components
-const ProveedorDashboard = () => {
-    const { user } = useAuth();
-    return (
-        <div style={{ padding: 'var(--spacing-2xl)' }}>
-            <h1>Dashboard Proveedor</h1>
-            <p>Bienvenido, {user?.empresa || user?.username}</p>
-        </div>
-    );
-};
+
 
 const AdminDashboard = () => {
     const { user } = useAuth();
@@ -205,7 +196,7 @@ const AppContent = () => {
                     path="/dashboard/proveedor" 
                     element={
                         <ProtectedRoute allowedRoles={['proveedor']}>
-                            <ProveedorDashboard />
+                            <DashboardProveedor />
                         </ProtectedRoute>
                     } 
                 />

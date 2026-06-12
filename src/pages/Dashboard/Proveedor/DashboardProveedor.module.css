@@ -1,0 +1,616 @@
+/* DashboardProveedor.module.css - Using your actual CSS variables */
+
+.dashboardContainer {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: var(--gray-200);
+  min-height: 100vh;
+}
+
+.dashboardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dashboardTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--gray-600);
+  margin-bottom: 0.5rem;
+}
+
+.dashboardSubtitle {
+  color: var(--gray-400);
+  font-size: 0.875rem;
+}
+
+.createProductBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-400));
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.createProductBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.statCard {
+  background: var(--gray-100);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.statCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.statCardContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statInfo {
+  flex: 1;
+}
+
+.statTitle {
+  color: var(--gray-400);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--gray-600);
+  margin-bottom: 0.5rem;
+}
+
+.statIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+/* Charts Section */
+.chartsSection {
+  margin-bottom: 2rem;
+}
+
+.chartCard {
+  background: var(--gray-100);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.chartCard h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--gray-600);
+  margin-bottom: 1.5rem;
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.timeRangeSelector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.timeBtn {
+  padding: 0.5rem 1rem;
+  background: var(--gray-300);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--gray-500);
+}
+
+.timeBtn:hover {
+  background: var(--primary-100);
+  color: var(--primary-500);
+}
+
+.timeBtn.active {
+  background: var(--primary-500);
+  color: white;
+}
+
+.chartContainer {
+  height: 400px;
+}
+
+.chartsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.chartContainerSmall {
+  height: 300px;
+}
+
+/* Recent Products Section */
+.recentSection {
+  background: var(--gray-100);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.sectionHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--gray-600);
+}
+
+.viewAllBtn {
+  padding: 0.5rem 1rem;
+  background: var(--gray-300);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--gray-500);
+}
+
+.viewAllBtn:hover {
+  background: var(--primary-100);
+  color: var(--primary-500);
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.productTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.productTable th {
+  text-align: left;
+  padding: 1rem;
+  background: var(--gray-300);
+  color: var(--gray-500);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-bottom: 2px solid var(--gray-200);
+}
+
+.productTable td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--gray-300);
+}
+
+.productCell {
+  min-width: 250px;
+}
+
+.productInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.productImage {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+}
+
+.productImagePlaceholder {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--gray-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-400);
+  font-size: 1.5rem;
+}
+
+.productName {
+  font-weight: 500;
+  color: var(--gray-600);
+}
+
+.priceCell {
+  font-weight: 600;
+  color: var(--primary-500);
+}
+
+.stockBadge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.inStock {
+  background: rgba(46, 125, 50, 0.1);
+  color: var(--secondary-500);
+}
+
+.outStock {
+  background: rgba(211, 47, 47, 0.1);
+  color: var(--error);
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.statusBadge.activo {
+  background: rgba(46, 125, 50, 0.1);
+  color: var(--secondary-500);
+}
+
+.statusBadge.inactivo {
+  background: rgba(211, 47, 47, 0.1);
+  color: var(--error);
+}
+
+.statusBadge.pendiente {
+  background: rgba(245, 124, 0, 0.1);
+  color: var(--warning);
+}
+
+.actionsCell {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.actionBtn {
+  padding: 0.5rem;
+  background: var(--gray-300);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--gray-400);
+}
+
+.actionBtn:hover {
+  background: var(--primary-100);
+  color: var(--primary-500);
+}
+
+.deleteBtn:hover {
+  background: rgba(211, 47, 47, 0.1);
+  color: var(--error);
+}
+
+.emptyTable {
+  text-align: center;
+  padding: 3rem !important;
+}
+
+.emptyTable p {
+  color: var(--gray-400);
+  margin-bottom: 1rem;
+}
+
+.emptyCreateBtn {
+  padding: 0.5rem 1rem;
+  background: var(--primary-500);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.emptyCreateBtn:hover {
+  background: var(--primary-400);
+  transform: translateY(-1px);
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--gray-300);
+  border-top-color: var(--primary-500);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: var(--gray-100);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 500px;
+  overflow: hidden;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--gray-300);
+}
+
+.modalHeader h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-600);
+}
+
+.modalClose {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--gray-400);
+}
+
+.modalBody {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.modalIcon {
+  font-size: 3rem;
+  color: var(--error);
+  margin-bottom: 1rem;
+}
+
+.modalBody p {
+  color: var(--gray-400);
+  margin-bottom: 0.5rem;
+}
+
+.modalWarning {
+  font-size: 0.875rem;
+  color: var(--error);
+}
+
+.modalFooter {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--gray-300);
+}
+
+.modalCancelBtn {
+  flex: 1;
+  padding: 0.75rem;
+  background: var(--gray-300);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--gray-500);
+}
+
+.modalConfirmBtn {
+  flex: 1;
+  padding: 0.75rem;
+  background: var(--error);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.modalConfirmBtn:hover {
+  background: #b71c1c;
+}
+
+/* Add to existing CSS */
+
+.chartSubtitle {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  margin-top: 0.25rem;
+}
+
+.chartEmpty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 200px;
+  color: var(--gray-400);
+  font-size: 0.875rem;
+}
+
+.chartsSection {
+  margin-bottom: 2rem;
+}
+
+.chartCard {
+  background: var(--gray-100);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.chartCard h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--gray-600);
+  margin-bottom: 1rem;
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.chartHeader h3 {
+  margin-bottom: 0;
+}
+
+.timeRangeSelector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.timeBtn {
+  padding: 0.5rem 1rem;
+  background: var(--gray-300);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--gray-500);
+}
+
+.timeBtn:hover {
+  background: var(--primary-100);
+  color: var(--primary-500);
+}
+
+.timeBtn.active {
+  background: var(--primary-500);
+  color: white;
+}
+
+.chartContainer {
+  height: 400px;
+}
+
+.chartsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.chartContainerSmall {
+  height: 300px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboardContainer {
+    padding: 1rem;
+  }
+
+  .dashboardTitle {
+    font-size: 1.5rem;
+  }
+
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .productTable th,
+  .productTable td {
+    padding: 0.75rem;
+  }
+
+  .productCell {
+    min-width: 200px;
+  }
+}

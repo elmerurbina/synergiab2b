@@ -51,12 +51,10 @@ export const AuthProvider = ({ children }) => {
     const loadUser = useCallback(async () => {
         const token = localStorage.getItem('access_token');
         if (!token) {
-            console.log('No token found, skipping loadUser');
             return null;
         }
         
         try {
-            console.log('🔄 Loading user profile from API...');
             const response = await profileService.getProfile();
             
             let userData = response;
@@ -71,22 +69,16 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(true);
             localStorage.setItem('user', JSON.stringify(processedUser));
             
-            console.log('✅ User profile loaded:', processedUser?.empresa || processedUser?.username);
-            console.log('✅ Profile image URL:', processedUser?.profile_image);
             return processedUser;
         } catch (error) {
-            console.error('❌ Error loading user profile:', error);
             return null;
         }
     }, [processUserData]);
 
     const checkAuthStatus = useCallback(async () => {
         if (isChecking.current) {
-            console.log('🔐 Auth check already in progress, skipping...');
             return;
         }
-        
-        console.log('🔐 Checking authentication status...');
         
         try {
             isChecking.current = true;
@@ -94,7 +86,6 @@ export const AuthProvider = ({ children }) => {
             
             const token = localStorage.getItem('access_token');
             if (!token) {
-                console.log('🔐 No token found');
                 setUser(null);
                 setIsAuthenticated(false);
                 setLoading(false);
@@ -110,23 +101,20 @@ export const AuthProvider = ({ children }) => {
                     setUser(processedStoredUser);
                     setIsAuthenticated(true);
                 } catch (e) {
-                    console.error('Error parsing stored user:', e);
+                    // Error parsing stored user
                 }
             }
             
             // Then fetch fresh data from API
             const response = await authAPI.getProfile();
-            console.log('✅ Auth check successful:', response.data);
             
             if (response.data) {
                 const processedUser = processUserData(response.data);
                 setUser(processedUser);
                 setIsAuthenticated(true);
                 localStorage.setItem('user', JSON.stringify(processedUser));
-                console.log('✅ Profile image URL from API:', processedUser?.profile_image);
             }
         } catch (error) {
-            console.error('❌ Auth check failed:', error.message);
             setUser(null);
             setIsAuthenticated(false);
             localStorage.removeItem('access_token');
@@ -139,18 +127,12 @@ export const AuthProvider = ({ children }) => {
     }, [processUserData]);
 
     const login = async (credentials) => {
-        console.log('🔐 Attempting login...');
         try {
             const response = await authAPI.login(credentials);
             
-            console.log('📦 Login response:', response.data);
-            
             if (response.status === 200 && response.data.user) {
-                console.log('✅ Login successful, processing user data...');
-                
                 // Process user data first
                 const processedUser = processUserData(response.data.user);
-                console.log('📸 Processed user with image:', processedUser.profile_image);
                 
                 // Update state
                 setUser(processedUser);
@@ -159,8 +141,7 @@ export const AuthProvider = ({ children }) => {
                 // Store in localStorage
                 localStorage.setItem('user', JSON.stringify(processedUser));
                 
-                // IMPORTANT: Load fresh profile data from API to ensure latest image
-                console.log('🔄 Fetching fresh profile data...');
+                // Load fresh profile data from API to ensure latest image
                 try {
                     const freshProfile = await profileService.getProfile();
                     let freshUserData = freshProfile;
@@ -170,9 +151,7 @@ export const AuthProvider = ({ children }) => {
                     const processedFreshUser = processUserData(freshUserData);
                     setUser(processedFreshUser);
                     localStorage.setItem('user', JSON.stringify(processedFreshUser));
-                    console.log('✅ Fresh profile loaded:', processedFreshUser.profile_image);
                 } catch (profileError) {
-                    console.error('Error loading fresh profile:', profileError);
                     // Fall back to login response data
                 }
                 
@@ -180,7 +159,6 @@ export const AuthProvider = ({ children }) => {
             }
             return { success: false, error: 'Login failed - no user data' };
         } catch (error) {
-            console.error('❌ Login error:', error);
             const errorMessage = error.response?.data?.error || 
                                error.response?.data?.message || 
                                'Credenciales inválidas';
@@ -189,28 +167,24 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = async () => {
-        console.log('🔐 Logging out...');
         try {
             await authAPI.logout();
         } catch (error) {
-            console.error('Logout error:', error);
+            // Error logging out
         } finally {
             setUser(null);
             setIsAuthenticated(false);
             localStorage.removeItem('access_token');
             localStorage.removeItem('refresh_token');
             localStorage.removeItem('user');
-            console.log('✅ Logout complete');
         }
     };
 
     const register = async (userData) => {
-        console.log('🔐 Registering user...');
         try {
             const response = await authAPI.register(userData);
             
             if (response.status === 201 && response.data.user) {
-                console.log('✅ Registration successful:', response.data.user);
                 const processedUser = processUserData(response.data.user);
                 setUser(processedUser);
                 setIsAuthenticated(true);
@@ -220,7 +194,6 @@ export const AuthProvider = ({ children }) => {
             }
             return { success: false, error: 'Registration failed - no user data' };
         } catch (error) {
-            console.error('❌ Registration error:', error);
             const errorMessage = error.response?.data?.error || 
                                error.response?.data?.message || 
                                'Error al registrar usuario';
@@ -242,14 +215,12 @@ export const AuthProvider = ({ children }) => {
             }
             throw new Error('No access token in response');
         } catch (error) {
-            console.error('❌ Token refresh failed:', error);
             return null;
         }
     }, []);
 
     // Force refresh user data (useful after profile updates)
     const refreshUser = useCallback(async () => {
-        console.log('🔄 Force refreshing user data...');
         const updatedUser = await loadUser();
         return updatedUser;
     }, [loadUser]);
