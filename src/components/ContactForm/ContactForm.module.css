@@ -1,7 +1,7 @@
 /* src/components/ContactForm/ContactForm.module.css */
 
 .formContainer {
-  background: white;
+  background: var(--gray-100);
   border-radius: var(--radius-xl);
   padding: 40px;
   box-shadow: var(--shadow-md);
@@ -60,6 +60,8 @@
   font-size: 1rem;
   transition: all var(--transition-fast);
   font-family: inherit;
+  background-color: var(--gray-200);
+  color: var(--gray-500);
 }
 
 .formGroup input:focus,
@@ -131,7 +133,7 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  background: #e8f5e9;
+  background: var(--secondary-100);
   border-left: 4px solid var(--success);
   padding: 15px 20px;
   border-radius: var(--radius-md);

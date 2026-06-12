@@ -49,7 +49,7 @@
   font-size: 0.95rem;
   color: var(--gray-500);
   outline: none;
-  background-color: white;
+  background-color: var(--gray-100);
   transition: border-color var(--transition-fast);
 }
 
@@ -71,6 +71,8 @@
   border-radius: var(--radius-md);
   outline: none;
   font-size: 0.9rem;
+  background-color: var(--gray-100);
+  color: var(--gray-500);
 }
 
 .priceInput:focus {
@@ -167,7 +169,7 @@
 }
 
 .productCard {
-  background-color: white;
+  background-color: var(--gray-100);
   border: 1px solid var(--gray-300);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -215,7 +217,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: white;
+  background-color: var(--gray-100);
   border: 1px solid var(--gray-300);
   color: var(--gray-400);
   font-size: 1.5rem;
@@ -236,7 +238,7 @@
 
 .favoriteButton.isFavorite {
   color: #D32F2F;
-  background-color: white;
+  background-color: var(--gray-100);
 }
 
 .productInfo {

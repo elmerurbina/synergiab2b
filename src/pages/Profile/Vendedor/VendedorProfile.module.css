@@ -2,7 +2,7 @@
 
 .profilePage {
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--gray-200) 0%, #f8f9fa 100%);
+  background: linear-gradient(135deg, var(--gray-200) 0%, var(--gray-100) 100%);
   padding: var(--spacing-2xl) 0;
 }
 
@@ -14,7 +14,7 @@
 
 /* Profile Header */
 .profileHeader {
-  background: white;
+  background: var(--gray-100);
   border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: var(--shadow-lg);
@@ -39,8 +39,8 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  border: 4px solid white;
-  background: white;
+  border: 4px solid var(--gray-100);
+  background: var(--gray-100);
   overflow: hidden;
   box-shadow: var(--shadow-lg);
 }
@@ -108,7 +108,7 @@
 .statBox {
   text-align: center;
   padding: var(--spacing-md);
-  background: white;
+  background: var(--gray-100);
   border-radius: var(--radius-md);
   transition: all var(--transition-normal);
   cursor: pointer;
@@ -176,7 +176,7 @@
 
 /* Tabs */
 .tabsContainer {
-  background: white;
+  background: var(--gray-100);
   border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: var(--shadow-md);
@@ -213,7 +213,7 @@
   color: var(--primary-500);
   border-bottom: 2px solid var(--primary-500);
   margin-bottom: -2px;
-  background: white;
+  background: var(--gray-100);
 }
 
 .tabContent {
@@ -223,7 +223,7 @@
 /* Info Section */
 .infoCard,
 .statsCard {
-  background: white;
+  background: var(--gray-100);
 }
 
 .infoCard h3,
@@ -281,7 +281,7 @@
 }
 
 .statItem {
-  background: linear-gradient(135deg, var(--gray-200), white);
+  background: linear-gradient(135deg, var(--gray-200), var(--gray-100));
   padding: var(--spacing-xl);
   border-radius: var(--radius-lg);
   text-align: center;
@@ -310,7 +310,7 @@
 /* Forms */
 .profileForm,
 .passwordForm {
-  background: white;
+  background: var(--gray-100);
   border-radius: var(--radius-xl);
   padding: var(--spacing-xl);
   box-shadow: var(--shadow-lg);

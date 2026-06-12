@@ -21,7 +21,7 @@ class Producto(models.Model):
     stock = models.IntegerField(default=0, verbose_name='Stock')
     unidad_medida = models.CharField(max_length=50, default='unidad', verbose_name='Unidad de medida')
     ubicacion = models.ForeignKey(Ubicacion, on_delete=models.SET_NULL, null=True, related_name='productos')
-    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='pendiente')
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='activo')
     visitas = models.IntegerField(default=0)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)

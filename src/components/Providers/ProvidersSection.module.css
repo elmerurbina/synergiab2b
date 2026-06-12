@@ -1,6 +1,6 @@
 .providersSection {
   padding: var(--spacing-2xl) 0;
-  background: linear-gradient(135deg, var(--gray-100) 0%, white 100%);
+  background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-200) 100%);
   border-top: 1px solid var(--gray-200);
 }
 
@@ -42,7 +42,7 @@
 }
 
 .providerCard {
-  background: white;
+  background: var(--gray-100);
   border: 1px solid var(--gray-200);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -155,7 +155,7 @@
 
 .viewProductsBtn {
   flex-grow: 1;
-  background-color: white;
+  background-color: var(--gray-100);
   border: 1px solid var(--gray-300);
   color: var(--gray-500);
   font-weight: 600;

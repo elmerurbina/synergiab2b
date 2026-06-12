@@ -98,7 +98,7 @@
 
 /* Catalog Section */
 .catalogSection {
-  background-color: white;
+  background-color: var(--gray-100);
   border: 1px solid var(--gray-200);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);

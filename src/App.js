@@ -233,7 +233,7 @@ const AppContent = () => {
                 pauseOnFocusLoss
                 draggable
                 pauseOnHover
-                theme="light"
+                theme="system"
             />
         </Layout>
     );

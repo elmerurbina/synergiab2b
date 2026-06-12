@@ -288,7 +288,7 @@
   top: calc(100% + var(--spacing-sm));
   right: 0;
   min-width: 280px;
-  background: white;
+  background: var(--gray-100);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-xl);
   overflow: hidden;
@@ -553,7 +553,7 @@
 /* Scroll behavior */
 .header.scrolled {
   box-shadow: var(--shadow-lg);
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--header-scrolled-bg);
   backdrop-filter: blur(10px);
 }
 

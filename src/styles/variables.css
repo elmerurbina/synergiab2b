@@ -62,4 +62,49 @@
   --transition-fast: 150ms ease-in-out;
   --transition-normal: 250ms ease-in-out;
   --transition-slow: 350ms ease-in-out;
+
+  /* Scrolled Header */
+  --header-scrolled-bg: rgba(255, 255, 255, 0.95);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Primary Colors - Azul Corporativo for Dark Mode */
+    --primary-100: #0D2447;
+    --primary-200: #143B70;
+    --primary-300: #1B539B;
+    --primary-400: #3E84E6;
+    --primary-500: #66A3FF;
+
+    /* Secondary Colors - Verde Negocios for Dark Mode */
+    --secondary-100: #0E3013;
+    --secondary-200: #184E20;
+    --secondary-300: #257230;
+    --secondary-400: #3CA647;
+    --secondary-500: #5CD068;
+
+    /* Tertiary Colors - Morado Innovación */
+    --tertiary-100: #2A1635;
+    --tertiary-200: #452055;
+    --tertiary-300: #66307E;
+    --tertiary-400: #9C4FBD;
+    --tertiary-500: #C376E2;
+
+    /* Grayscale */
+    --gray-100: #1E1E1E;
+    --gray-200: #121212;
+    --gray-300: #2D2D2D;
+    --gray-400: #8E8E93;
+    --gray-500: #E2E8F0;
+    --gray-600: #FFFFFF;
+
+    /* Shadows (darkened for better depth contrast) */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+
+    /* Scrolled Header */
+    --header-scrolled-bg: rgba(30, 30, 30, 0.95);
+  }
 }
