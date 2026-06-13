@@ -163,10 +163,6 @@ class ProductoCreateView(generics.CreateAPIView):
         serializer.save(proveedor=self.request.user)
     
     def create(self, request, *args, **kwargs):
-        # Log received data for debugging
-        print("📸 Files received:", request.FILES.keys())
-        print("📝 Data received:", request.data.keys())
-        
         return super().create(request, *args, **kwargs)
 
 
@@ -176,7 +172,7 @@ class ProductoUpdateView(generics.UpdateAPIView):
     """
     permission_classes = [IsAuthenticated]
     serializer_class = ProductoCreateUpdateSerializer
-    parser_classes = (MultiPartParser, FormParser)  # Allow file uploads
+    parser_classes = (MultiPartParser, FormParser)  
     
     def get_queryset(self):
         return Producto.objects.filter(proveedor=self.request.user)

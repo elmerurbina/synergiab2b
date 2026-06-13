@@ -57,7 +57,6 @@ const ProductFormModal = ({ isOpen, onClose, product, onSuccess, categories: ini
             const response = await productAPI.getProduct(productId);
             setExistingImages(response.data.imagenes || []);
         } catch (error) {
-            console.error('Error loading images:', error);
         }
     };
 
@@ -237,7 +236,7 @@ const ProductFormModal = ({ isOpen, onClose, product, onSuccess, categories: ini
         }
     };
 
-    // FIXED: This function now uses FormData instead of JSON
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -252,9 +251,7 @@ const ProductFormModal = ({ isOpen, onClose, product, onSuccess, categories: ini
             let response;
             
             if (product?.id) {
-                // UPDATE EXISTING PRODUCT
                 if (newImages.length > 0) {
-                    // If there are new images, use FormData for update
                     const formDataToSend = new FormData();
                     formDataToSend.append('nombre', formData.nombre);
                     formDataToSend.append('descripcion', formData.descripcion);

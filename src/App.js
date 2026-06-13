@@ -1,4 +1,3 @@
-// App.js
 import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -23,6 +22,7 @@ import VendedorProfile from './pages/Profile/Vendedor/VendedorProfile';
 import DashboardProveedor from './pages/Dashboard/Proveedor/DashboardProveedor';
 import CompradorProfile from './pages/Profile/Comprador/CompradorProfile'; 
 import ProviderCatalog from './pages/ProviderCatalog/ProviderCatalog';
+import ProductDetail from './components/Products/ProductDetail';
 
 // Protected Route component
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
@@ -152,6 +152,8 @@ const AppContent = () => {
                         </div>
                     } 
                 />
+
+                <Route path="/producto/:id" element={<ProductDetail />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route 
