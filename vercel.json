@@ -10,7 +10,7 @@
             }
         },
         {
-            "src": "backend/manage.py",
+            "src": "backend/backend/wsgi.py",
             "use": "@vercel/python",
             "config": {
                 "maxLambdaSize": "15mb"
@@ -20,7 +20,15 @@
     "routes": [
         {
             "src": "/api/(.*)",
-            "dest": "/backend/manage.py"
+            "dest": "/backend/backend/wsgi.py"
+        },
+        {
+            "src": "/admin/(.*)",
+            "dest": "/backend/backend/wsgi.py"
+        },
+        {
+            "src": "/auth/(.*)",
+            "dest": "/backend/backend/wsgi.py"
         },
         {
             "src": "/(.*)",
