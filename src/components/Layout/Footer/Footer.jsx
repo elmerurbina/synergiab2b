@@ -206,10 +206,10 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { name: 'Facebook', icon: FaFacebook, href: '#' },
-    { name: 'Twitter', icon: FaTwitter, href: '#' },
-    { name: 'LinkedIn', icon: FaLinkedin, href: '#' },
-    { name: 'Instagram', icon: FaInstagram, href: '#' },
+    { name: 'Facebook', icon: FaFacebook, href: 'https://www.facebook.com/' },
+    { name: 'Twitter', icon: FaTwitter, href: 'https://x.com/' },
+    { name: 'LinkedIn', icon: FaLinkedin, href: 'linkedin.com' },
+    { name: 'Instagram', icon: FaInstagram, href: 'https://www.instagram.com/' },
   ];
 
   const contactInfo = [
