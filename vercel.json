@@ -8,28 +8,9 @@
                 "distDir": "build",
                 "buildCommand": "CI=false DISABLE_ESLINT_PLUGIN=true npm run build"
             }
-        },
-        {
-            "src": "backend/backend/wsgi.py",
-            "use": "@vercel/python",
-            "config": {
-                "maxLambdaSize": "15mb"
-            }
         }
     ],
     "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "/backend/backend/wsgi.py"
-        },
-        {
-            "src": "/admin/(.*)",
-            "dest": "/backend/backend/wsgi.py"
-        },
-        {
-            "src": "/auth/(.*)",
-            "dest": "/backend/backend/wsgi.py"
-        },
         {
             "src": "/(.*)",
             "dest": "/$1"
